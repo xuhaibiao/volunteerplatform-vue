@@ -1,0 +1,27 @@
+html,body,#app{
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+/* .container {
+    padding: 30px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+} */
+.el-aside {
+    background-color: #333744;
+}
+.el-main {
+    background-color: #eaedf1;
+}
+.el-container{
+    height: 100%;
+}
+  
+.collapse-btn {
+    float: left;
+    padding: 0 21px;
+    cursor: pointer;
+    line-height: 70px;
+}
