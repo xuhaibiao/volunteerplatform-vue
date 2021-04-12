@@ -13,6 +13,16 @@
                 <el-form-item prop="password">
                     <el-input v-model="loginForm.password" prefix-icon="iconfont icon-mima" type="password"></el-input>
                 </el-form-item>
+                <el-form-item prop="userType">
+                    <el-select v-model="loginForm.type" placeholder="请选择">
+                        <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item class="btns">
                     <el-button type="primary" @click="login">登录</el-button>
                     <el-button type="info" @click="resetLoginForm">重置</el-button>
@@ -27,8 +37,9 @@ export default {
     data(){
         return{
             loginForm:{
-                username:"admin",
-                password:"123456"
+                username:"wwwwww",
+                password:"123456",
+                type:"1"
             },
             loginRules:{
                 username: [
@@ -39,8 +50,19 @@ export default {
                     { required: true, message: "请输入密码", trigger: "blur" },
                     { min: 6, max: 8, message: "密码为 6~8 位", trigger: "blur" }
                 ]
-            }
-        };
+            },
+            options: [{
+                value: '0',
+                label: '志愿者'
+                }, {
+                value: '1',
+                label: '社区工作者'
+                }, {
+                value: '2',
+                label: '超级管理员'
+                }],
+            
+            };
     },
     methods:{
         resetLoginForm(){
@@ -51,10 +73,21 @@ export default {
                if (!valid) return;
                 // 调用post请求
                 const {data :res} = await this.$http.post("login", this.loginForm);
-                if (res.flag == "success" ) {
-                    window.sessionStorage.setItem("user",res.data);
+                if (res.code == 1 ) {
+                    console.log(res.data.address);
+                
+                    window.sessionStorage.setItem("user",JSON.stringify(res.data));
                     this.$message.success("登陆成功！！！");
-                    this.$router.push({ path: "/home"});// 路由
+                    if(res.flag == "0"){
+                        // 路由
+                        this.$router.push({ path: "/volunteer/activity"});
+                    }else if(res.flag == "1"){
+                        // 路由
+                        this.$router.push({ path: "/worker/activityManagement"});
+                    }else{
+                        this.$router.push({ path: "/administrator/activity"});
+                    }
+                    
                 }else{
                     this.$message.error("登录失败！！！");
                 }

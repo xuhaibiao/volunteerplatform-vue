@@ -117,14 +117,14 @@ export default {
             items: [
                 {
                     // icon: 'el-icon-s-home',
-                    index: 'home',
+                    index: 'activity',
                     title: '    志愿活动',
                     icon: 'iconfont icon-banjizhiyuanhuodong-copy'
                 },
                 {
                     // icon: 'el-icon-s-home',
-                    index: 'resume',
-                    title: '    服务履历',
+                    index: 'record',
+                    title: '    志愿记录',
                     icon: 'iconfont icon-icon-test'
                 },
                 {

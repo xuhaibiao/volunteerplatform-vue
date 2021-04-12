@@ -1,0 +1,395 @@
+<template>
+    <el-container>
+        <el-header>
+            <div>
+                <!--伸缩按钮-->
+                <div class="collapse-btn" @click="collapseChage">
+                    <i v-if="!collapse" class="el-icon-s-fold"></i>
+                    <i v-else class="el-icon-s-unfold"></i>
+                </div>
+                <span>社区志愿服务网</span>
+            </div>
+            <el-button type="info" @click="logout">安全退出</el-button>
+        </el-header>
+        <el-container>
+            <el-aside :width="collapse ?'64px':'200px'">
+                <!--侧边栏菜单区 unique-opened="true" 只保持一个菜单展开 router开启路由-->
+                <el-menu default-active="record" background-color="#545c64" text-color="#fff" active-text-color="#409eff" 	unique-opened :collapse="isCollapse" :router="true">
+                    <template v-for="item in items">
+                        <el-menu-item :index="item.index" :key="item.index">
+                            <i :class="item.icon"></i>
+                            <span v-if="!collapse" slot="title">{{ item.title }}</span>
+                        </el-menu-item>
+                    </template>
+                </el-menu>
+            </el-aside>
+
+            <el-main>
+                <el-table
+                :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+                style="width: 100%"
+                >
+                <el-table-column type="expand">
+                    <template slot-scope="props">
+                        <el-form label-position="left" inline class="demo-table-expand">
+                            <el-form-item label="记录编号" >
+                                <span>{{ props.row.volunteerRecord.id }}</span>
+                            </el-form-item>
+                            <el-form-item label="记录状态">
+                                <span>{{statusAndButtonText[props.row.volunteerRecord.status].statusText}}</span>
+                            </el-form-item>
+                            <el-form-item label="记录生成时间">
+                                <span>{{ props.row.volunteerRecord.createTime }}</span>
+                            </el-form-item>
+                            <el-form-item label="我的评价">
+                                <span>{{ props.row.volunteerRecord.volunteerEvaluateContent }}</span>
+                            </el-form-item>
+                            <el-form-item label="我的评分">
+                                <span>{{ props.row.volunteerRecord.volunteerEvaluateScore }}</span>
+                            </el-form-item>
+                            <el-form-item label="工作人员评分">
+                                <span>{{ props.row.volunteerRecord.workerEvaluate }}</span>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="text" @click="handleInfo(props.row)">活动详情</el-button>                                
+                            </el-form-item>
+                        </el-form>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="volunteerRecord.id" label="记录编号" width="80" align="center"></el-table-column>
+                <el-table-column prop="activityResponse.activity.name" label="参与活动名" align="center"></el-table-column>
+                <el-table-column prop="volunteerRecord.createTime" label="记录生成时间" align="center"></el-table-column>
+                <el-table-column prop="volunteerRecord.status"  label="记录状态" align="center">
+                    <template slot-scope="scope">
+                        <span>{{statusAndButtonText[scope.row.volunteerRecord.status].statusText}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="280" align="center">
+                    <template slot-scope="scope">
+                        <el-button
+                            :disabled="(scope.row.volunteerRecord.status===1 || scope.row.volunteerRecord.status===3 || scope.row.volunteerRecord.status===5
+                            || scope.row.volunteerRecord.status===7|| scope.row.volunteerRecord.status===8)"
+                            type="primary"
+                            style="width:150px"
+                            @click="handleCancelOrEvaluate(scope.row)"
+                        >{{statusAndButtonText[scope.row.volunteerRecord.status].buttonText}}</el-button>
+                    </template>
+                </el-table-column>
+                </el-table>
+                <div class="block">
+                     <el-pagination
+                        style="text-align: right"
+                        background
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="currentPage"
+                        :page-sizes="[1, 10, 20, 40]" 
+                        :page-size="pagesize"        
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="tableData.length">   
+                    </el-pagination>
+                </div>
+            
+               
+            </el-main>
+             <!-- 详情弹出框 -->
+            <el-dialog title="活动详情" :visible.sync="infoVisible" width="30%">
+                <el-form ref="info" :model="info" label-width="100px">
+                    <el-form-item label="活动编号">
+                        <el-lebal v-model="info.activityResponse.activity.id">{{info.activityResponse.activity.id}}</el-lebal>
+                    </el-form-item>
+                    <el-form-item label="活动名">
+                        <el-lebal v-model="info.activityResponse.activity.name">{{info.activityResponse.activity.name}}</el-lebal>
+                    </el-form-item>
+                    <el-form-item label="活动所在区" >
+                        <el-lebal v-model="info.activityResponse.activity.address">{{info.activityResponse.activity.address}}</el-lebal>
+                        <!-- <el-input v-model="info.activity.address" :disabled="true" ></el-input> -->
+                    </el-form-item>
+                    <el-form-item label="详细地址">
+                        <el-lebal v-model="info.activityResponse.activity.detailAddress">{{info.activityResponse.activity.detailAddress}}</el-lebal>
+                    </el-form-item>
+                    <el-form-item label="发起社区">
+                        <el-lebal v-model="info.activityResponse.communityName">{{info.activityResponse.communityName}}</el-lebal>
+                    </el-form-item>
+                    <el-form-item label="发起人">
+                        <el-lebal v-model="info.activityResponse.sponsor">{{info.activityResponse.sponsor}}</el-lebal>
+                    </el-form-item>
+                    <el-form-item label="工时/小时">
+                        <el-lebal v-model="info.activityResponse.activity.workingHours">{{info.activityResponse.activity.workingHours}}</el-lebal>
+                    </el-form-item>
+                    <el-form-item label="招募人数">
+                        <el-lebal v-model="info.activityResponse.activity.recruitNumber">{{info.activityResponse.activity.recruitNumber}}</el-lebal>
+                    </el-form-item>
+                    <el-form-item label="活动开始时间">
+                        <el-lebal v-model="info.activityResponse.activity.activityBeginTime">{{info.activityResponse.activity.activityBeginTime}}</el-lebal>
+                    </el-form-item>
+                     <el-form-item label="活动截止时间">
+                        <el-lebal v-model="info.activityResponse.activity.activityEndTime">{{info.activityResponse.activity.activityEndTime}}</el-lebal>
+                      </el-form-item>
+                    <el-form-item label="活动内容">
+                        <el-input v-model="info.activityResponse.activity.content" type="textarea" :disabled="true" :rows="5"></el-input>
+                    </el-form-item>
+                    
+                </el-form>
+            </el-dialog>
+
+
+            <!-- 评价弹出框 -->
+            <el-dialog title="评价" :visible.sync="evaluateVisible" :before-close="handleEvaluateClose" width="30%">
+                <el-form ref="evaluate" :model="evaluate" label-width="100px">
+                    <el-form-item label="给出您的评分">
+                        <el-rate v-model="evaluate.score"></el-rate>
+                       
+                    </el-form-item>
+
+                    <el-form-item label="给出您的评论">
+                        <el-input
+                        type="textarea"
+                        style="width: 250px"
+                        :rows="5"
+                        v-model="evaluate.content"
+                        maxlength="50"
+                        show-word-limit>
+                        </el-input>
+                        
+                     </el-form-item>
+
+                    
+                </el-form>
+                <span slot="footer">
+                    <el-button type="primary" @click="confirmEvaluate">确 定</el-button>
+                    <el-button @click="cancelEvaluate">取 消</el-button>
+                 </span>
+            </el-dialog>
+        </el-container>
+    </el-container>
+</template>
+
+<script>
+
+export default {
+    inject:['reload'], 
+
+    data(){
+        return{
+            infoVisible: false,
+            evaluateVisible: false,
+            collapse: false,
+            currentPage:1, //初始页
+            pagesize:10,    //    每页的数据
+            items: [
+                {
+                    // icon: 'el-icon-s-home',
+                    index: 'activity',
+                    title: '    志愿活动',
+                    icon: 'iconfont icon-banjizhiyuanhuodong-copy'
+                },
+                {
+                    // icon: 'el-icon-s-home',
+                    index: 'record',
+                    title: '    志愿记录',
+                    icon: 'iconfont icon-icon-test'
+                },
+                {
+                    // icon: 'el-icon-s-home',
+                    index: 'information',
+                    title: '    个人信息',
+                    icon: 'iconfont icon-gerenxinxi'
+                },
+                {
+                    // icon: 'el-icon-s-home',
+                    index: 'message',
+                    title: '    消息',
+                    icon: 'iconfont icon-xiaoxi'
+                },
+                {
+                    // icon: 'el-icon-s-home',
+                    index: 'setting',
+                    title: '    设置',
+                    icon: 'iconfont icon-shezhi'
+                }, 
+            
+            ],
+            tableData:[{
+                volunteerRecord: {},
+                activityResponse: {
+                    activity:{}
+                }
+
+            }],
+            info:{
+                volunteerRecord:{},
+                activityResponse:{
+                    activity:{}
+                }
+            },
+            evaluate:{
+                score: 0,
+                content: '',
+                recordId:0,
+                recordStatus:4,
+            },
+            statusAndButtonText: [
+                {
+                    statusText:"报名审核中",
+                    buttonText:"取消报名"
+                },
+                {
+                    statusText:"报名未通过",
+                    buttonText:"不可操作"
+                },
+                {
+                    statusText:"报名通过",
+                    buttonText:"取消报名"
+                },
+                {
+                    statusText:"活动进行中",
+                    buttonText:"不可操作"
+                },
+                {
+                    statusText:"志愿结束待评价",
+                    buttonText:"去评价以获得工时"
+                },
+                {
+                    statusText:"已评价",
+                    buttonText:"不可操作"
+                },
+                {
+                    statusText:"志愿结束待评价",
+                    buttonText:"评价以获得工时"
+                },
+                {
+                    statusText:"已评价",
+                    buttonText:"不可操作"
+                },
+                {
+                    statusText:"该记录涉及活动已被删除",
+                    buttonText:"不可操作"
+                },
+                
+            ]
+           ,
+            
+        };
+    },
+    // 类似onload
+    created() {
+        this.getRecords();
+    },
+    methods:{
+        logout(){
+            window.sessionStorage.clear();
+            this.$router.push("/login");
+        },
+        
+        selected(data){
+             console.log(data);
+        },
+        find(){
+            console.log(placeholders);
+        },
+        collapseChage() {
+            this.collapse = !this.collapse;
+        },
+        async getRecords(){
+           
+            const {data:res} = await this.$http.get("volunteer/record",{  
+                params: {  
+                    "userId": JSON.parse(window.sessionStorage.getItem("user")).id
+                }  
+            });
+            this.tableData = res.data;
+        },
+        handleInfo(row) {
+            this.info = row;
+            this.infoVisible = true;
+    
+        },
+        // 初始页currentPage、初始每页数据数pagesize和数据data
+        handleSizeChange(size) {
+                this.pagesize = size;
+                console.log(this.pagesize)  //每页下拉显示数据
+        },
+        handleCurrentChange(currentPage){
+                this.currentPage = currentPage;
+                console.log(this.currentPage)  //点击第几页
+        },
+
+        //评价或取消提交按钮
+        // todo:取消报名
+        handleCancelOrEvaluate(row){
+            if(row.volunteerRecord.status == 4||row.volunteerRecord.status == 6){
+                this.evaluate.recordId = row.volunteerRecord.id;
+                this.evaluate.recordStatus = row.volunteerRecord.status;
+                this.evaluateVisible = true;
+            }
+            
+        },
+        
+        cancelEvaluate(){
+            this.evaluate.score = 0;
+            this.evaluate.content = '';
+            this.evaluateVisible = false;
+        },
+        handleEvaluateClose(){
+            this.cancelEvaluate();
+        },
+        async confirmEvaluate(){
+        
+            const {data :res} = await this.$http.post("volunteer/record/evaluate", this.evaluate);
+            if(res.code == 1){
+                // this.cancelEvaluate();
+                this.reload();
+                this.$message.success('评价成功！');
+            }else if(res.code == 2){
+                this.cancelEvaluate();
+                this.$message.error('评价失败！');
+                 
+            }
+        }
+    }
+
+}
+</script>
+
+<style lang="less" scoped>
+@import "//at.alicdn.com/t/font_2416161_nazgwdqmnsi.css";
+
+.el-header {
+  background-color: #373d41;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 0%;
+  align-items: center;
+  color: #fff;
+  font-size: 20px;
+  div { 
+    display: flex;
+    align-items: center;
+    span {
+      margin-left: 15px;
+    }
+  }
+  
+}
+
+</style>
+
+<style >
+
+.demo-table-expand {
+    font-size: 0;
+  }
+.demo-table-expand label {
+    width: 100px;
+    color: #99a9bf;
+  }
+.demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+}
+</style>
+
+
+
