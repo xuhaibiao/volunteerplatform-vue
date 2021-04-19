@@ -3,10 +3,14 @@ import VueRouter from 'vue-router'
 import Login from '../components/Login.vue'
 import Activity from '../components/volunteer/Activity.vue'
 import Record from '../components/volunteer/Record.vue'
-import Message from '../components/volunteer/Message.vue'
-import Information from '../components/volunteer/Information.vue'
+import VolunteerMessage from '../components/volunteer/Message.vue'
+import VolunteerInformation from '../components/volunteer/Information.vue'
+import VolunteerCommunity from '../components/volunteer/Community.vue'
 import ActivityManagement from '../components/worker/ActivityManagement'
 import NeedEvaluateRecords from '../components/worker/NeedEvaluateRecords'
+import WorkerInformation from '../components/worker/Information.vue'
+import WorkerCommunity from '../components/worker/Community.vue'
+import WorkerMessage from '../components/worker/Message.vue'
 
 
 Vue.use(VueRouter)
@@ -31,11 +35,20 @@ const routes = [
   },
   {
     path:"/volunteer/message",
-    component:Message
+    component:VolunteerMessage
   },
   {
     path:"/volunteer/information",
-    component:Information
+    component:VolunteerInformation
+  },
+  {
+    path:"/volunteer/community",
+    component:VolunteerCommunity
+  },
+  {
+    path:"/worker/information",
+    component:WorkerInformation
+
   },
   {
     path:"/worker/activityManagement",
@@ -44,7 +57,15 @@ const routes = [
   {
     path:"/worker/needEvaluateRecords",
     component:NeedEvaluateRecords
-  }
+  },
+  {
+    path:"/worker/community",
+    component:WorkerCommunity
+  },
+  {
+    path:"/worker/message",
+    component:WorkerMessage
+  },
 
   
 ]

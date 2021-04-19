@@ -14,7 +14,7 @@
         <el-container>
             <el-aside :width="collapse ?'64px':'200px'">
                 <!--侧边栏菜单区 unique-opened="true" 只保持一个菜单展开 router开启路由-->
-                <el-menu default-active="record" background-color="#545c64" text-color="#fff" active-text-color="#409eff" 	unique-opened :collapse="isCollapse" :router="true">
+                <el-menu default-active="needEvaluateRecords" background-color="#545c64" text-color="#fff" active-text-color="#409eff" 	unique-opened :collapse="isCollapse" :router="true">
                     <template v-for="item in items">
                         <el-menu-item :index="item.index" :key="item.index">
                             <i :class="item.icon"></i>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-
+import global from '../../components/Global'
 export default {
     inject:['reload'], 
 
@@ -72,7 +72,7 @@ export default {
         return{
             infoVisible: false,
             evaluateVisible: false,
-            collapse: false,
+            collapse: '',
             currentPage:1, //初始页
             pagesize:10,    //    每页的数据
             items: [
@@ -96,6 +96,12 @@ export default {
                 },
                 {
                     // icon: 'el-icon-s-home',
+                    index: 'community',
+                    title: '    我的社区',
+                    icon: 'iconfont icon-zuzhi'
+                }, 
+                {
+                    // icon: 'el-icon-s-home',
                     index: 'message',
                     title: '    消息',
                     icon: 'iconfont icon-xiaoxi'
@@ -105,7 +111,7 @@ export default {
                     index: 'statistics',
                     title: '    志愿统计',
                     icon: 'iconfont icon-shezhi'
-                }, 
+                },
             
             ],
             tableData:[{
@@ -117,6 +123,7 @@ export default {
     },
     // 类似onload
     created() {
+        this.collapse = global.collapse;
         this.getNeedEvaluateRecords();
     },
     methods:{
@@ -127,6 +134,7 @@ export default {
         
         collapseChage() {
             this.collapse = !this.collapse;
+            global.collapse = !global.collapse;
         },
         async getNeedEvaluateRecords(){
            

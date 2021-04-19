@@ -29,6 +29,10 @@
 </script>
 
 <style>
+.el-table--border th.gutter:last-of-type {
+    display: block!important;
+    width: 17px!important;
+}
 
 #nav a.router-link-exact-active {
   color: #42b983;

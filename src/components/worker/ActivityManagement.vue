@@ -35,7 +35,7 @@
                         <div class="form-box">
                             <el-form ref="screenForm" :model="screenForm" label-width="80px">
                                 <el-form-item label="活动筛选" prop="place">
-                                    <el-input  v-model="screenForm.activityName" placeholder="活动名" class="handle-input mr10"></el-input>
+                                    <el-input  v-model="screenForm.activityName" placeholder="活动名" class="handle-input mr10" @keydown.enter.native="seachEnter"></el-input><input v-show="false"/>
                                     <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
                                     <el-button type="primary" @click="reset">重置</el-button>
                                     <el-button type="success" icon="el-icon-plus" @click="handleAdd">发布活动</el-button>
@@ -186,15 +186,16 @@
                     <el-form-item label="活动内容"  prop="content" style="width: 70%">
                         <el-input type="textarea" rows="5" v-model="addActivityForm.content"></el-input>
                     </el-form-item>
+                    <el-form-item >
+                        <el-button type="primary" @click="confirmAdd('addActivityForm')">发 布</el-button>
+                        <el-button @click="cnacelAdd">取 消</el-button>
+                    </el-form-item>
                 </el-form>
-                <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="confirmAdd">发 布</el-button>
-                    <el-button @click="cnacelAdd">取 消</el-button>
-                </span>
+               
             </el-dialog>
 
             <!-- 修改弹出框 -->
-            <el-dialog title="修改活动" :visible.sync="editVisible" width="40%">
+            <el-dialog title="修改活动" :visible.sync="editVisible" width="40%" :show-close=false :close-on-click-modal='false'>
                 <el-form ref="editActivityForm" :model="editActivityForm" :rules="addActivityRules" label-width="110px">
                     <el-form-item label="活动名" prop="name" style="width: 60%">
                         <el-input v-model="editActivityForm.name" type="integer"></el-input>
@@ -244,11 +245,11 @@
                     <el-form-item label="活动内容"  prop="content" style="width: 70%">
                         <el-input type="textarea" rows="5" v-model="editActivityForm.content"></el-input>
                     </el-form-item>
+                    <el-form-item >
+                        <el-button type="primary" @click="confirmEdit('editActivityForm')">确 定</el-button>
+                        <el-button @click="cancelEdit">取 消</el-button>
+                    </el-form-item>
                 </el-form>
-                <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="confirmEdit">确 定</el-button>
-                    <el-button @click="cnacelEdit">取 消</el-button>
-                </span>
             </el-dialog>
 
 
@@ -290,7 +291,7 @@
 
 <script>
 import VDistpicker from 'v-distpicker'
-
+import global from '../../components/Global'
 
 export default {
     inject:['reload'], 
@@ -303,9 +304,9 @@ export default {
                     { required: true, message: "请输入活动名", trigger: "blur" },
                     // { min: 5, max: 8, message: "长度在 5 到 8 个字符", trigger: "blur" }
                 ],
-                address: [
-                    { required: true, message: "请输入省市区", trigger: "blur" },
-                ],
+                // address: [
+                //     { required: true, message: "请输入省市区", trigger: "blur" },
+                // ],
                 detailAddress: [
                     { required: true, message: "请输入详细地址", trigger: "blur" },
                 ],
@@ -343,7 +344,7 @@ export default {
             addVisible: false,
             editVisible: false,
             reviewVisible: false,
-            collapse: false,
+            collapse: '',
             info:{
                 activity:{}
             },
@@ -377,8 +378,8 @@ export default {
                 detailAddress:'',
                 workingHours:'',
                 recruitNumber:'',
-                recruitDateRange:[],
-                activityDateRange:[],
+                recruitDateRange:[2],
+                activityDateRange:[2],
                 content:''
 
             },
@@ -404,6 +405,12 @@ export default {
                 },
                 {
                     // icon: 'el-icon-s-home',
+                    index: 'community',
+                    title: '    我的社区',
+                    icon: 'iconfont icon-zuzhi'
+                }, 
+                {
+                    // icon: 'el-icon-s-home',
                     index: 'message',
                     title: '    消息',
                     icon: 'iconfont icon-xiaoxi'
@@ -413,7 +420,8 @@ export default {
                     index: 'statistics',
                     title: '    志愿统计',
                     icon: 'iconfont icon-shezhi'
-                }, 
+                },
+                
             
             ],
             tableData:[{ 
@@ -432,6 +440,7 @@ export default {
     },
     // 类似onload
     created() {
+        this.collapse = global.collapse;
         this.user = JSON.parse(window.sessionStorage.getItem("user"));
         this.getActivity();
         this.screenForm.activityName = "";
@@ -454,6 +463,7 @@ export default {
         
         collapseChage() {
             this.collapse = !this.collapse;
+            global.collapse = !global.collapse;
         },
         
         handleInfo(row) {
@@ -462,8 +472,7 @@ export default {
     
         },
         
-        async handleSearch(){
-            
+        async handleSearch(){  
             const {data:res} = await this.$http.get("worker/activity/search",{  
                 params: {  
                     "activityName": this.screenForm.activityName
@@ -472,6 +481,9 @@ export default {
             this.tableData = res.data;
 
             
+        },
+        seachEnter(){
+            this.handleSearch();
         },
         reset(){
             this.screenForm.activityName = '';
@@ -526,23 +538,47 @@ export default {
             this.editActivityForm.id = row.activity.id;
             this.editVisible = true;
         },
-        async confirmEdit(){
-            if(this.editActivityForm.province=='省'||this.editActivityForm.city=='市'||this.editActivityForm.area=='区'){
-                this.$message.error("请填写完整省市区！");
-            }else{
-                this.editActivityForm.worker = this.user;
-                const {data :res} = await this.$http.put("worker/activity/edit", this.editActivityForm);
-                if (res.code == 1 ) {
-                    this.editVisible = false;
-                    this.$message.success("修改成功！");
-                    this.reload();
+        confirmEdit(formName){
+            this.$refs[formName].validate(async (valid) => {
+            if (valid) {
+                if(this.editActivityForm.province=='省'||this.editActivityForm.city=='市'||this.editActivityForm.area=='区'){
+                    this.$message.error("请填写完整省市区！");
+                    return false;
                 }else{
-                    this.$message.error("修改失败！！！");
+                    this.editActivityForm.worker = this.user;
+                    const {data :res} = await this.$http.put("worker/activity/edit", this.editActivityForm);
+                    if (res.code == 1 ) {
+                        this.editVisible = false;
+                        this.$message.success("修改成功！");
+                        this.reload();
+                    }else{
+                        this.$message.error("修改失败！！！");
+                    }
                 }
+            } else {
+                return false;
             }
+            });
+
+            
         },
         cancelEdit(){
             this.editVisible = false;
+            this.editActivityForm.name = '';
+            this.editActivityForm.recruitRange = "全国";
+            this.editActivityForm.province = '';
+            this.editActivityForm.city = '';
+            this.editActivityForm.area = '';
+            this.editActivityForm.detailAddress = '';
+            this.editActivityForm.workingHours = '';
+            this.editActivityForm.recruitNumber = '';
+            this.editActivityForm.recruitDateRange[0] = '';
+            this.editActivityForm.recruitDateRange[1] = '';
+            this.editActivityForm.activityDateRange[0] = '';
+            this.editActivityForm.activityDateRange[1] = '';
+            this.editActivityForm.content = '';
+            this.editActivityForm.id = '';
+            
         },
         handleAdd(){
             this.addVisible = true;
@@ -550,21 +586,31 @@ export default {
         cnacelAdd(){
             this.addVisible = false;
         },
-        async confirmAdd(){
-            if(this.addActivityForm.province=='省'||this.addActivityForm.city=='市'||this.addActivityForm.area=='区'){
-                this.$message.error("请填写完整省市区！");
-            }else{
-                this.addActivityForm.worker = this.user;
-                const {data :res} = await this.$http.post("worker/activity/edit", this.editActivityForm);
-                if (res.code == 1 ) {
-                    this.editVisible = false;
-                    this.$message.success("发布成功！");
-                    this.reload();
-                    
+        confirmAdd(formName){
+            this.$refs[formName].validate(async (valid) => {
+            if (valid) {
+                if(this.addActivityForm.province=='省'||this.addActivityForm.city=='市'||this.addActivityForm.area=='区'){
+                    this.$message.error("请填写完整省市区！");
+                    return false;
                 }else{
-                    this.$message.error("登录失败！！！");
+                    this.addActivityForm.worker = this.user;
+                    const {data :res} = await this.$http.post("worker/activity/add", this.addActivityForm);
+                    if (res.code == 1 ) {
+                        this.addVisible = false;
+                        this.$message.success("发布成功！");
+                        this.reload();
+                        
+                    }else{
+                        this.$message.error("发布失败！！！");
+                    }
                 }
+            } else {
+                return false;
             }
+            });
+
+
+            
         },
         //审核报名
         async handleReview(row){
@@ -578,7 +624,7 @@ export default {
         },
         //审核通过
         async handleAgree(index, row){
-            this.re
+            
             const {data :res} = await this.$http.post("worker/activity/agreeJoin",row);
             if (res.code == 1 ) {
                 this.reviewTableData.splice(index,1);
@@ -605,15 +651,18 @@ export default {
 
 
         selectProvince(value) {
-            this.addActivityForm.province = value.value
+            this.addActivityForm.province = value.value;
+            this.editActivityForm.province = value.value;
     
         },
         selectCity(value) {
-            this.addActivityForm.city = value.value
+            this.addActivityForm.city = value.value;
+            this.editActivityForm.city = value.value;
            
         },
         selectArea(value) {
-            this.addActivityForm.area = value.value
+            this.addActivityForm.area = value.value;
+            this.editActivityForm.area = value.value;
         },
 
         // 初始页currentPage、初始每页数据数pagesize和数据data

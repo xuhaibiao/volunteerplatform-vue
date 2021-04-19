@@ -28,6 +28,7 @@
                 <el-table
                 :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                 style="width: 100%"
+                ref="configurationTable"
                 >
                 <el-table-column type="expand">
                     <template slot-scope="props">
@@ -166,15 +167,16 @@
 </template>
 
 <script>
-
+import global from '../../components/Global'
 export default {
     inject:['reload'], 
+    
 
     data(){
         return{
             infoVisible: false,
             evaluateVisible: false,
-            collapse: false,
+            collapse: '',
             currentPage:1, //初始页
             pagesize:10,    //    每页的数据
             items: [
@@ -196,6 +198,12 @@ export default {
                     title: '    个人信息',
                     icon: 'iconfont icon-gerenxinxi'
                 },
+                {
+                    // icon: 'el-icon-s-home',
+                    index: 'community',
+                    title: '    社区组织',
+                    icon: 'iconfont icon-zuzhi'
+                }, 
                 {
                     // icon: 'el-icon-s-home',
                     index: 'message',
@@ -274,7 +282,9 @@ export default {
     },
     // 类似onload
     created() {
+        this.collapse =  global.collapse;
         this.getRecords();
+
     },
     methods:{
         logout(){
@@ -290,6 +300,7 @@ export default {
         },
         collapseChage() {
             this.collapse = !this.collapse;
+            global.collapse = !global.collapse;
         },
         async getRecords(){
            
@@ -299,6 +310,7 @@ export default {
                 }  
             });
             this.tableData = res.data;
+            this.$refs.configurationTable.$el.style.width = '99.5%';
         },
         handleInfo(row) {
             this.info = row;

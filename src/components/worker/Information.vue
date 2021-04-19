@@ -25,70 +25,41 @@
             </el-aside>
 
             <el-main>    
-                <el-row>
-                    <!-- <div class="form-box">
-                        <el-form ref="form" :model="form" label-width="80px">
-                            <el-form-item label="姓名:">
-                                <el-label v-model="form.name" v-text="form.name"></el-label>
-                            </el-form-item>
-                            <el-form-item label="电话:" >
-                                <el-label v-model="form.phone" v-text="form.phone"></el-label>
-                            </el-form-item>
-                            <el-form-item label="身份证号:">
-                                <el-label v-model="form.idCard" v-text="form.idCard"></el-label>
-                            </el-form-item>
-                            <el-form-item label="密码:">
-                                <el-label v-model="form.password" v-text="form.password"></el-label>
-                            </el-form-item>
-                            <el-form-item label="性别:">
-                                <el-label v-model="form.gender" v-text="this.options[form.gender].label"></el-label>
-                            </el-form-item>
-                            <el-form-item label="志愿时长:">
-                                <el-label v-model="form.volunteerHours" v-text="form.volunteerHours"></el-label>
-                            </el-form-item>
-                            <el-form-item label="志愿分数:">
-                                <el-label v-model="form.volunteerAverageScore" v-text="form.volunteerAverageScore"></el-label>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-button type="primary" @click="edit">编辑</el-button>
-                                <el-button>取消</el-button>
-                            </el-form-item>
-                        </el-form>
-                    </div> -->
-                    <div class="form-box">
-                        <el-form ref="form" :model="form" label-width="80px">
-                            <el-form-item label="姓名:">
-                                <el-label v-model="form.name">{{form.name}}</el-label>
-                            </el-form-item>
-                            <el-form-item label="电话:" >
-                                <el-label v-model="form.phone">{{form.phone}}</el-label>
-                            </el-form-item>
-                            <el-form-item label="身份证号:">
-                                <el-label v-model="form.idCard">{{form.idCard}}</el-label>
-                            </el-form-item>
-                            <el-form-item label="密码:">
-                                <el-label v-model="form.password">{{form.password}}</el-label>
-                            </el-form-item>
-                            <el-form-item label="性别:">
-                                <el-label v-model="options[form.gender]">{{this.options[form.gender]}}</el-label>
-                            </el-form-item>
-                            <el-form-item label="志愿时长:">
-                                <el-label v-model="form.volunteerHours">{{form.volunteerHours}}</el-label>
-                            </el-form-item>
-                            <el-form-item label="志愿总分:">
-                                <el-label v-model="form.volunteerScore">{{form.volunteerScore}}</el-label>
-                            </el-form-item>
-                            <el-form-item label="志愿次数:">
-                                <el-label v-model="form.volunteerNumber">{{form.volunteerNumber}}</el-label>
-                            </el-form-item>
-                            <el-form-item>
-                                <el-button type="primary" @click="edit">编辑</el-button>
-                                <el-button>取消</el-button>
-                            </el-form-item>
-                        </el-form>
-                    </div>
-                </el-row>
-                
+                <div class="form-box">
+                <el-form ref="form" :model="form" label-width="80px">
+                    <el-form-item label="姓名:">
+                        <el-label v-model="form.name">{{form.name}}</el-label>
+                    </el-form-item>
+                    <el-form-item label="电话:" >
+                        <el-label v-model="form.phone">{{form.phone}}</el-label>
+                    </el-form-item>
+                    <el-form-item label="身份证号:">
+                        <el-label v-model="form.idCard">{{form.idCard}}</el-label>
+                    </el-form-item>
+                    <el-form-item label="密码:">
+                        <el-label v-model="form.password">{{form.password}}</el-label>
+                    </el-form-item>
+                    <el-form-item label="性别:">
+                         <el-label v-model="form.gender">{{this.options[form.gender]}}</el-label>
+                    </el-form-item>
+                    <el-form-item label="邮箱:">
+                        <el-label v-model="form.email">{{form.email}}</el-label>
+                    </el-form-item>
+                    <!-- <el-form-item label="地区">
+                        <v-distpicker :province="form.province" :city="form.city" :area="form.area" 
+                                @selected='selected'
+                                @province="selectProvince" 
+                                @city="selectCity" 
+                                @area="selectArea">                
+                        </v-distpicker>
+                    </el-form-item> -->
+                    
+                    <el-form-item>
+                        <el-button type="primary" @click="edit">编辑</el-button>
+                        <el-button>取消</el-button>
+                    </el-form-item>
+                </el-form>
+                </div>
             </el-main>
              <!-- 编辑弹出框 -->
             <el-dialog title="信息编辑" :visible.sync="editVisible" width="30%">
@@ -110,6 +81,9 @@
                             <el-radio :label= 1>男</el-radio>
                             <el-radio :label= 0>女</el-radio>
                         </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="邮箱:">
+                        <el-input v-model="editForm.email"></el-input>
                     </el-form-item>
                     <!-- <el-form-item label="地区">
                         <v-distpicker :province="form.province" :city="form.city" :area="form.area" 
@@ -135,24 +109,24 @@
 import VDistpicker from 'v-distpicker'
 import global from '../../components/Global'
 export default {
-    inject:['reload'], 
      components: { VDistpicker },
 
     data(){
         return{
             collapse: '',
+            // disabled: true,
             editVisible: false,
             items: [
                 {
                     // icon: 'el-icon-s-home',
-                    index: 'activity',
-                    title: '    志愿活动',
+                    index: 'activityManagement',
+                    title: '    活动管理',
                     icon: 'iconfont icon-banjizhiyuanhuodong-copy'
                 },
                 {
                     // icon: 'el-icon-s-home',
-                    index: 'record',
-                    title: '    志愿记录',
+                    index: 'needEvaluateRecords',
+                    title: '    待评价记录',
                     icon: 'iconfont icon-icon-test'
                 },
                 {
@@ -164,7 +138,7 @@ export default {
                 {
                     // icon: 'el-icon-s-home',
                     index: 'community',
-                    title: '    社区组织',
+                    title: '    我的社区',
                     icon: 'iconfont icon-zuzhi'
                 }, 
                 {
@@ -175,13 +149,12 @@ export default {
                 },
                 {
                     // icon: 'el-icon-s-home',
-                    index: 'setting',
-                    title: '    设置',
+                    index: 'statistics',
+                    title: '    志愿统计',
                     icon: 'iconfont icon-shezhi'
-                }, 
+                },
             
             ],
-            
             options: [
                 
               "女","男"
@@ -194,9 +167,8 @@ export default {
                 idCard: '',
                 password: '',
                 gender: '',
-                volunteerHours: '',
-                volunteerScore: '',
-                    
+                email: ''
+                
             },
             editForm: {
                 id: '',
@@ -205,22 +177,19 @@ export default {
                 idCard: '',
                 password: '',
                 gender: '',
-                type:'',
+                type: '',
+                email: ''
+                
             },
-            user:{}
+            user:{},
+            userCommuntity:{},
         };
     },
     // 类似onload
-
-    // mounted(){
-    //     this.user = JSON.parse(window.sessionStorage.getItem("user"));
-    //     this.getUserInfo();
-    // },
     created() {
         this.collapse = global.collapse;
         this.user = JSON.parse(window.sessionStorage.getItem("user"));
         this.getUserInfo();
-        
     },
     methods:{
         logout(){
@@ -237,19 +206,17 @@ export default {
             const {data :res} = await this.$http.get("information/", {
                 params: {  
                     "userId": this.user.id,
-                    "type": 0   //代表志愿者
+                    "type": 1   //代表社区工作者
                 }  
             });
             window.sessionStorage.setItem("user",JSON.stringify(res.data));
             this.form = res.data;
             
-            
         },
         
         async onSubmit() {
-            //代表志愿者
-            this.editForm.type = 0;
-            
+            //代表社区工作者
+            this.editForm.type = 1;
             const {data :res} = await this.$http.post("information/edit", this.editForm);
             if(res.code == 1){
                 var user = res.data;
@@ -272,8 +239,8 @@ export default {
             this.editForm.password = this.form.password;
             this.editForm.gender = this.form.gender;
             this.editForm.id = this.form.id;
+            this.editForm.email = this.form.email;
             this.editVisible = true;
-            
         }
     }
 
@@ -309,8 +276,6 @@ export default {
 .form-box .line {
     text-align: center;
 }
-
-
 </style>
 
 

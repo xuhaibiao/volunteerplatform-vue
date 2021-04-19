@@ -18,7 +18,7 @@
             <el-button type="info" @click="logout">安全退出</el-button>
         </el-header>
         <el-container>
-            <el-aside :width="collapse ?'64px':'200px'">
+            <el-aside :width="collapse ?'64px':'200px'" >
                 <!--侧边栏菜单区 unique-opened="true" 只保持一个菜单展开 router开启路由-->
                 <el-menu default-active="activity" background-color="#545c64" text-color="#fff" active-text-color="#409eff" 	unique-opened :collapse="isCollapse" :collapse-transition="false" :router="true">
                     <template v-for="item in items">
@@ -45,7 +45,7 @@
                                         </el-col>
                                     
                                         <el-col :span="12">
-                                            <el-input  v-model="screenForm.activityName" placeholder="活动名" class="handle-input mr10"></el-input>
+                                            <el-input  v-model="screenForm.activityName" placeholder="活动名" class="handle-input mr10" @keydown.enter.native="seachEnter"></el-input><input v-show="false"/>
                                             <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
                                             <el-button type="primary" @click="reset">重置</el-button>
                                         </el-col>
@@ -62,33 +62,46 @@
             
                 <el-row>
                     <el-table
-                :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
-                border
-                class="table"
-                header-cell-class-name="table-header"
-                >
-                <el-table-column prop="activity.id" label="活动编号" width="100" align="center"></el-table-column>
-                <el-table-column prop="activity.name" label="活动名" align="center"></el-table-column>
-                <el-table-column prop="activityStatus" label="活动状态" align="center"></el-table-column>
-                <el-table-column prop="communityName" label="活动社区" align="center"></el-table-column>
-                <el-table-column prop="activity.recruitNumber" label="计划招募人数" align="center" width="120" ></el-table-column>
-                <el-table-column prop="hasRecruitedNumber" label="已报名人数" align="center" width="100" ></el-table-column>
-                <el-table-column prop="hasAgreeNumber" label="已招募人数" align="center" width="100" ></el-table-column>
-                <el-table-column prop="activityTimeRange" label="活动时间" align="center"></el-table-column>
-                <el-table-column label="操作" width="180" align="center">
-                    <template slot-scope="scope">
-                        <el-button
-                            type="text"
-                            icon="el-icon-info"
-                            @click="handleInfo(scope.row)"
-                        >详情</el-button>
-                        <el-button
-                            type="text"
-                            icon="iconfont icon-baoming"
-                            @click="handleSignUp(scope.row)"
-                        >报名</el-button>
-                    </template>
-                </el-table-column>
+                    :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+                    border
+                    class="table"
+                    header-cell-class-name="table-header"
+                    ref="configurationTable"
+                    >
+                        <el-table-column prop="activity.id" label="活动编号" width="100" align="center"></el-table-column>
+                        <el-table-column prop="activity.name" label="活动名" align="center"></el-table-column>
+                        <el-table-column prop="communityName" label="活动社区" align="center"></el-table-column>
+                        <el-table-column prop="activityStatus" label="活动状态" width="100" style="color: green" align="center">
+                            <template slot-scope="scope">
+                                    <span v-if="scope.row.activityStatus==='招募中'" style="color: green">招募中</span>
+                                    <span v-else style="color:red">{{scope.row.activityStatus}}</span>
+                            </template>
+                            
+                        </el-table-column>
+                        <el-table-column prop="activity.recruitRange" label="面向人群" width="100" align="center">
+                            <template slot-scope="scope">
+                                    {{options[scope.row.activity.recruitRange]}}
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="activity.recruitNumber" label="计划招募人数" align="center" width="120" ></el-table-column>
+                        <el-table-column prop="hasRecruitedNumber" label="已报名人数" align="center" width="100" ></el-table-column>
+                        <el-table-column prop="hasAgreeNumber" label="已招募人数" align="center" width="100" ></el-table-column>
+                        <el-table-column prop="activityTimeRange" label="活动时间" align="center"></el-table-column>
+                        <el-table-column label="操作" width="180" align="center">
+                            <template slot-scope="scope">
+                                <el-button
+                                    type="text"
+                                    icon="el-icon-info"
+                                    @click="handleInfo(scope.row)"
+                                    style="color:green"
+                                >详情</el-button>
+                                <el-button
+                                    type="text"
+                                    icon="iconfont icon-baoming"
+                                    @click="handleSignUp(scope.row)"
+                                >报名</el-button>
+                            </template>
+                        </el-table-column>
                     </el-table>
                 </el-row>
                 
@@ -205,6 +218,7 @@
 
 <script>
 import VDistpicker from 'v-distpicker'
+import global from '../../components/Global'
 
 export default {
     inject:['reload'], 
@@ -228,7 +242,7 @@ export default {
             pagesize:10,    //    每页的数据
             infoVisible: false,
             signUpInfoVisible: false,
-            collapse: false,
+            collapse: '',
             info:{
                 activity:{}
             },
@@ -259,6 +273,12 @@ export default {
                 },
                 {
                     // icon: 'el-icon-s-home',
+                    index: 'community',
+                    title: '    社区组织',
+                    icon: 'iconfont icon-zuzhi'
+                }, 
+                {
+                    // icon: 'el-icon-s-home',
                     index: 'message',
                     title: '    消息',
                     icon: 'iconfont icon-xiaoxi'
@@ -272,32 +292,51 @@ export default {
             
             ],
             tableData:[{ },
-            ]
+            ],
+            options:["社区内部", "全国"]
         };
     },
     // 类似onload
     created() {
+        this.collapse = global.collapse;
         this.user = JSON.parse(window.sessionStorage.getItem("user"));
+        this.getUserInfo();
         this.getActivity();
         this.screenForm.province="省";
         this.screenForm.city="市";
         this.screenForm.area="区";
         this.screenForm.activityName = "";
+        
     },
     methods:{
         logout(){
             window.sessionStorage.clear();
             this.$router.push("/login");
         },
+        async getUserInfo(){
+            const {data :res} = await this.$http.get("information/", {
+                params: {  
+                    "userId": this.user.id,
+                    "type": 0   //代表志愿者
+                }  
+            });
+            window.sessionStorage.setItem("user",JSON.stringify(res.data));
+            this.user = res.data;
+            
+            
+        },
         async getActivity(){
             const {data:res} = await this.$http.get("volunteer/activity");
             this.tableData = res.data;
+            this.$refs.configurationTable.$el.style.width = '99.5%';
+           
             // if( res.status != 200) return this.$message.error("操作失败！！！");
             
         },
         
         collapseChage() {
             this.collapse = !this.collapse;
+            global.collapse = !global.collapse;
         },
         
         handleInfo(row) {
@@ -306,8 +345,12 @@ export default {
     
         },
         handleSignUp(row){
+            alert(row.activity.recruitRange);
+            alert(this.user.communityId);
             if(!(row.activityStatus=="招募中")){
                 this.$message.warning("活动未在招募时间段！");
+            }else if(row.activity.recruitRange == 0 && this.user.communityId != row.communityId){
+                this.$message.warning("活动只对社区内部开放，请先加入该社区！");
             }else{
                 this.signUpInfo = row;
                 this.signUpInfo.user = this.user;
@@ -360,6 +403,9 @@ export default {
             this.tableData = res.data;
 
             
+        },
+        seachEnter(){
+            this.handleSearch();
         },
         reset(){
             this.screenForm.province = '';
@@ -423,6 +469,7 @@ export default {
     line-height: 30px !important;
   }
 }
+
 </style>
 
 

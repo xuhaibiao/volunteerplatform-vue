@@ -1,17 +1,18 @@
 <template>
-    <div class="login_container">
-        <div class="login_box">
-            <div class="avatar_box">
-            <!--头像-->
-            <img src="../assets/logo.png" alt />
-            </div>
+    <div class="login-wrap">
+        <div class="ms-login">
             <!--添加表单-->
-            <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" class="login_form" label-width="0px">
+            <div class="ms-title">社区志愿服务系统</div>
+            <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" class="ms-content" label-width="0px">
                 <el-form-item prop="username">
-                    <el-input v-model="loginForm.username" prefix-icon="iconfont icon-denglu"></el-input>
+                    <el-input v-model="loginForm.username">
+                        <el-button slot="prepend" icon="iconfont icon-denglu"></el-button>
+                    </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
-                    <el-input v-model="loginForm.password" prefix-icon="iconfont icon-mima" type="password"></el-input>
+                    <el-input v-model="loginForm.password" type="password">
+                        <el-button slot="prepend" icon="iconfont icon-mima"></el-button>
+                    </el-input>
                 </el-form-item>
                 <el-form-item prop="userType">
                     <el-select v-model="loginForm.type" placeholder="请选择">
@@ -26,6 +27,7 @@
                 <el-form-item class="btns">
                     <el-button type="primary" @click="login">登录</el-button>
                     <el-button type="info" @click="resetLoginForm">重置</el-button>
+                    <el-button type="primary" @click="signUp">注册</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -99,51 +101,59 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// 跟节点样式
-.login_container {
-  background-color: #2b4b6b;
-  height: 100%;
-}
-.login_box {
-  width: 450px;
-  height: 300px;
-  background-color: #fff;
-  border-radius: 3px;// 圆角
-  position: absolute;// 绝对定位
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);// 根据自己位置 以自己为长度位移
 
-  .avatar_box {
-    width: 130px;
-    height: 130px;
-    border: 1px solid #eee;
-    border-radius: 50%; // 加圆角
-    padding: 10px;
-    box-shadow: 0 0 10px #ddd;// 盒子阴影
+
+.login-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    // background-image: url(../assets/img/login-bg.jpg);
+    background-image: url(../assets/img/001.jpg);
+    background-size: 100%;
+}
+.ms-title {
+    width: 100%;
+    line-height: 50px;
+    text-align: center;
+    font-size: 20px;
+    color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+.ms-login {
     position: absolute;
     left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #0ee;
-    img {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%; // 加圆角
-      background-color: #eee;
-    }
-  }
-  .btns {
+    top: 50%;
+    width: 350px;
+    height: 340px;
+    margin: -190px 0 0 -175px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+}
+
+// 跟节点样式
+.login_container {
+//   background-color: #2b4b6b;
+//   height: 100%;
+//   background-image: url(../assets/img/login-bg.jpg);
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-image: url(../assets/img/login-bg.jpg);
+    background-size: 100%;
+}
+
+.btns {
+    text-align: center;
     display: flex;// 弹性布局
     justify-content: flex-end; // 尾部对齐
-  }
-  .login_form {
-    position: absolute;
-    bottom: 0%;
-    width: 100%;
-    padding: 0 10px;
-    box-sizing: border-box;// 设置边框
-  }
 }
+
+
+.ms-content {
+    padding: 30px 30px;
+}
+
 </style>
 
 
