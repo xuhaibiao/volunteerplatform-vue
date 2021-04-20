@@ -20,14 +20,14 @@
         <el-container>
             <el-aside :width="collapse ?'64px':'200px'" >
                 <!--侧边栏菜单区 unique-opened="true" 只保持一个菜单展开 router开启路由-->
-                <el-menu default-active="activity" background-color="#545c64" text-color="#fff" active-text-color="#409eff" 	unique-opened :collapse="isCollapse" :collapse-transition="false" :router="true">
+                <el-menu default-active="activity" background-color="#545c64" text-color="#fff" active-text-color="#409eff"  unique-opened :collapse="isCollapse" :collapse-transition="false" :router="true">
                     <template v-for="item in items">
                         <el-menu-item :index="item.index" :key="item.index">
                             <i :class="item.icon"></i>
                             <span v-if="!collapse" slot="title">{{ item.title }}</span>
                         </el-menu-item>
                     </template>
-            </el-menu>
+                </el-menu>
             </el-aside>
 
             <el-main>

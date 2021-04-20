@@ -41,4 +41,8 @@
 .el-main{
      background-image: url(./assets/img/main.png);
 }
+
+.el-menu{
+    width: 200px !important;
+}
 </style>
