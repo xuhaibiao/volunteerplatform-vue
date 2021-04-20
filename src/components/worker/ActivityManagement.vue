@@ -58,7 +58,9 @@
                 <el-table-column prop="activity.name" label="活动名" align="center"></el-table-column>
                 <el-table-column prop="activityStatus" label="活动状态" align="center">
                     <template slot-scope="scope">
-                        <el-button v-if="scope.row.activityStatus=='招募中'" type="text" @click="handleReview(scope.row)">招募中,去审核报名</el-button>
+                        <el-button v-if="scope.row.activityStatus=='招募中'" type="text"  @click="handleReview(scope.row)">招募中,去审核报名</el-button>
+                        <el-button v-else-if="scope.row.activityStatus=='招募结束,活动未开始'||scope.row.activityStatus=='活动进行中'" type="text" style="color: green" @click="handleVolunteerInfo(scope.row)">{{scope.row.activityStatus+",查看人员信息"}}</el-button>
+                        <el-button v-else-if="scope.row.activityStatus=='活动已结束'" type="text" style="color: orange" @click="handleEvaluateInfo(scope.row)">活动已结束,查看评价</el-button>
                         <el-lebal v-else >{{scope.row.activityStatus}}</el-lebal>
                     </template>
                 </el-table-column>
@@ -282,6 +284,45 @@
                     </el-table>
             </el-dialog>
            
+
+            <!-- 参加活动的志愿者列表弹出框 -->
+            <el-dialog title="参加人员信息" :visible.sync="volunteerInfoVisible" width="50%" >
+                <el-table
+                :data="volunteerInfo"
+                border
+                class="table"
+                header-cell-class-name="table-header"
+                >
+                    <el-table-column prop="id" label="志愿者编号" width="100" align="center"></el-table-column>
+                    <el-table-column prop="name" label="姓名" align="center"  width="200"></el-table-column>
+                    <el-table-column prop="gender" label="性别" width="100" align="center">
+                        <template slot-scope="scope">
+                            {{options[scope.row.gender]}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="idCard" label="身份证号" align="center"></el-table-column>
+                </el-table>
+            </el-dialog>
+
+            <!-- 参加活动的志愿者评价信息弹出框 -->
+            <el-dialog title="志愿者评价信息" :visible.sync="volunteerEvaluateVisible" width="70%" >
+                <el-table
+                :data="volunteerEvaluateInfo"
+          
+                class="table"
+                header-cell-class-name="table-header"
+                >
+                    <el-table-column prop="id" label="志愿者编号" width="100" align="center"></el-table-column>
+                    <el-table-column prop="name" label="姓名" align="center"  width="200"></el-table-column>
+                    <el-table-column prop="gender" label="性别" width="100" align="center">
+                        <template slot-scope="scope">
+                            {{options[scope.row.gender]}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="volunteerEvaluateScore" label="评分" width="100" align="center"></el-table-column>
+                    <el-table-column prop="volunteerEvaluateContent" label="评价" align="center"></el-table-column>
+                </el-table>
+            </el-dialog>
         </el-container>
                 
     </el-container>
@@ -344,6 +385,8 @@ export default {
             addVisible: false,
             editVisible: false,
             reviewVisible: false,
+            volunteerInfoVisible: false,
+            volunteerEvaluateVisible: false,
             collapse: '',
             info:{
                 activity:{}
@@ -427,6 +470,12 @@ export default {
             tableData:[{ 
 
             },
+            
+            ],
+            options: [
+                
+              "女","男"
+            
             ],
             reviewTableData:[
                 {
@@ -434,6 +483,14 @@ export default {
                     recordId:''
                 }
             ],
+
+            volunteerInfo:[{
+
+            }],
+
+            volunteerEvaluateInfo:[{
+                
+            }],
 
         
         };
@@ -637,7 +694,6 @@ export default {
     
         //审核未通过
         async handleRefuse(index, row){
-            
             const {data :res} = await this.$http.post("worker/activity/refuseJoin", row);
             if (res.code == 1 ) {
                 this.reviewTableData.splice(index,1);
@@ -648,7 +704,28 @@ export default {
             }
         },
 
+        // 参加活动的志愿者信息 
+        async handleVolunteerInfo(row){
+            const {data:res} = await this.$http.get("worker/activity/volunteerInfo",{  
+                params: {  
+                    "activityId": row.activity.id
+                }  
+            });
+            this.volunteerInfo = res.data;
+            this.volunteerInfoVisible = true;
 
+        },
+
+        // 对活动的评价信息
+        async handleEvaluateInfo(row){
+            const {data:res} = await this.$http.get("worker/activity/volunteerEvaluateInfo",{  
+                params: {  
+                    "activityId": row.activity.id
+                }  
+            });
+            this.volunteerEvaluateInfo = res.data;
+            this.volunteerEvaluateVisible = true;
+        },
 
         selectProvince(value) {
             this.addActivityForm.province = value.value;

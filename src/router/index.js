@@ -11,6 +11,7 @@ import NeedEvaluateRecords from '../components/worker/NeedEvaluateRecords'
 import WorkerInformation from '../components/worker/Information.vue'
 import WorkerCommunity from '../components/worker/Community.vue'
 import WorkerMessage from '../components/worker/Message.vue'
+import Statistics from '../components/worker/Statistics.vue'
 
 
 Vue.use(VueRouter)
@@ -65,6 +66,10 @@ const routes = [
   {
     path:"/worker/message",
     component:WorkerMessage
+  },
+  {
+    path:"/worker/statistics",
+    component:Statistics
   },
 
   

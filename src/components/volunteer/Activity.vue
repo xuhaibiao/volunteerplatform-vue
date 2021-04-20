@@ -345,8 +345,6 @@ export default {
     
         },
         handleSignUp(row){
-            alert(row.activity.recruitRange);
-            alert(this.user.communityId);
             if(!(row.activityStatus=="招募中")){
                 this.$message.warning("活动未在招募时间段！");
             }else if(row.activity.recruitRange == 0 && this.user.communityId != row.communityId){

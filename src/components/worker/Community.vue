@@ -22,16 +22,16 @@
                     <template v-for="item in items">
                         <el-menu-item :index="item.index" :key="item.index">
                             <i :class="item.icon"></i>
-                            <span v-if="!collapse" slot="title">{{ item.title }}</span>
+                            <span v-if="!collapse" slot="title" >{{ item.title }}</span>
                         </el-menu-item>
                     </template>
             </el-menu>
             </el-aside>
 
-            <el-main>
+            <el-main >
                 <el-row :gutter="20">
                     <el-col :span="8">
-                        <el-card shadow="hover" class="mgb20" style="height:252px;  background: #EAEDF1 ">
+                        <el-card shadow="hover" class="mgb20" style="height:252px;  background: #EAEDF1 " v-cloak>
                     
                             <div class="user-info-list">
                                 社区组织编号：
@@ -68,8 +68,7 @@
                     <el-col :span="16">
                         <el-card shadow="hover" class="mgb20" style="height:252px;  background: #EAEDF1 ">
                             <el-table
-                                :data="workerTableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
-                                
+                                :data="workerTableData"
                                 class="table"
                                 header-cell-class-name="table-header"
                                 >
@@ -90,6 +89,7 @@
                             :data="volunteerTableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                             class="table"
                             header-cell-class-name="table-header"
+                            
                             >
                             <el-table-column prop="id" label="志愿者编号" width="100" align="center"></el-table-column>
                             <el-table-column prop="name" label="志愿者姓名" align="center" width="100"></el-table-column>
@@ -99,13 +99,11 @@
                                     {{options[scope.row.gender]}}
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="idCard" label="志愿者身份证号" align="center"  ></el-table-column>
+                            <el-table-column prop="idCard" label="志愿者身份证号" align="center" ></el-table-column>
                             <el-table-column prop="volunteerHours" label="志愿者总工时" align="center" width="120" ></el-table-column>
                             <el-table-column prop="volunteerScore" label="志愿者总分数" align="center" width="120" ></el-table-column>
                             <el-table-column prop="volunteerNumber" label="志愿者志愿次数" align="center" width="120" ></el-table-column>
                             <el-table-column prop="address" label="志愿者地址" align="center" ></el-table-column>
-                           
-
                         </el-table>
                             
                     </el-card>
@@ -121,7 +119,7 @@
                         :page-sizes="[1, 10, 20, 40]" 
                         :page-size="pagesize"        
                         layout="total, sizes, prev, pager, next, jumper"
-                        :total="tableData.length">   
+                        :total="volunteerTableData.length">   
                     </el-pagination>
                 </div>
             </el-main>
@@ -180,12 +178,12 @@ export default {
             communityInfo:{
 
             },
-            workerTableData:{
+            workerTableData:[{
+                
+            }],
+            volunteerTableData:[{
 
-            },
-            volunteerTableData:{
-
-            },
+            }],
             
             currentPage:1, //初始页
             pagesize:10,    //    每页的数据
@@ -425,6 +423,12 @@ export default {
 
 .mgb20 {
     margin-bottom: 20px;
+}
+
+
+
+[v-cloak] {
+    display: none;
 }
 </style>
 

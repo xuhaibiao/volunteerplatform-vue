@@ -7,7 +7,10 @@
                     <i v-if="!collapse" class="el-icon-s-fold"></i>
                     <i v-else class="el-icon-s-unfold"></i>
                 </div>
-                <span>社区志愿服务网</span>
+                <span>社区志愿服务网 欢迎 
+                    <el-lebal style="color:#F00" v-model=this.user.name>{{this.user.name}}</el-lebal> 
+                    社区工作者!
+                </span>
             </div>
             <el-button type="info" @click="logout">安全退出</el-button>
         </el-header>

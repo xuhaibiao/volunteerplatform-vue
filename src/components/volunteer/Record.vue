@@ -7,7 +7,12 @@
                     <i v-if="!collapse" class="el-icon-s-fold"></i>
                     <i v-else class="el-icon-s-unfold"></i>
                 </div>
-                <span>社区志愿服务网</span>
+                <span>社区志愿服务网 欢迎 
+                    <el-lebal style="color:#F00" v-model=this.user.name>{{this.user.name}}</el-lebal> 
+                    志愿者，您已累计志愿 
+                    <el-lebal style="color:#F00" v-model=this.user.volunteerHours>{{this.user.volunteerHours}}</el-lebal>
+                    小时！
+                </span>
             </div>
             <el-button type="info" @click="logout">安全退出</el-button>
         </el-header>
@@ -72,7 +77,7 @@
                             || scope.row.volunteerRecord.status===7|| scope.row.volunteerRecord.status===8)"
                             type="primary"
                             style="width:150px"
-                            @click="handleCancelOrEvaluate(scope.row)"
+                            @click="handleCancelOrEvaluate(scope.$index, scope.row)"
                         >{{statusAndButtonText[scope.row.volunteerRecord.status].buttonText}}</el-button>
                     </template>
                 </el-table-column>
@@ -275,13 +280,19 @@ export default {
                     buttonText:"不可操作"
                 },
                 
-            ]
-           ,
-            
+            ],
+            cancelSignUpData: {
+                volunteerRecord:{},
+                communityId: '',
+                activityId: '',
+                activityName:'',
+            },
+            user:{}
         };
     },
     // 类似onload
     created() {
+        this.user = JSON.parse(window.sessionStorage.getItem("user"));
         this.collapse =  global.collapse;
         this.getRecords();
 
@@ -327,13 +338,22 @@ export default {
                 console.log(this.currentPage)  //点击第几页
         },
 
-        //评价或取消提交按钮
+        //评价或取消报名按钮
         // todo:取消报名
-        handleCancelOrEvaluate(row){
+        async handleCancelOrEvaluate(index, row){
             if(row.volunteerRecord.status == 4||row.volunteerRecord.status == 6){
                 this.evaluate.recordId = row.volunteerRecord.id;
                 this.evaluate.recordStatus = row.volunteerRecord.status;
                 this.evaluateVisible = true;
+            }else{
+                this.cancelSignUpData.volunteerRecord = row.volunteerRecord;
+                this.cancelSignUpData.communityId = row.activityResponse.communityId;
+                this.cancelSignUpData.activityId = row.activityResponse.activity.id;
+                this.cancelSignUpData.activityName = row.activityResponse.activity.name;
+                const {data :res} = await this.$http.post("volunteer/record/cancelSignUp", this.cancelSignUpData);
+                if(res.code == 1){
+                    this.tableData[index].volunteerRecord.status = 1;
+                }
             }
             
         },

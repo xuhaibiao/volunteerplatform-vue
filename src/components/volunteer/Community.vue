@@ -10,8 +10,7 @@
                 <span style="width=90%">
                     社区志愿服务网 欢迎 
                     <el-lebal style="color:#F00" v-model=this.user.name>{{this.user.name}}</el-lebal> 
-                    志愿者，
-                      
+                    志愿者，     
                     <el-lebal v-if="this.userCommuntity!=null" style="color:#F00" v-model=this.userCommuntity>您已加入：{{this.userCommuntity.name}}，
                         <el-button type="text" @click="quit" >点击退出组织</el-button>
                     </el-lebal>
