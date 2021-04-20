@@ -37,4 +37,8 @@
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+
+.el-main{
+     background-image: url(./assets/img/main.png);
+}
 </style>
