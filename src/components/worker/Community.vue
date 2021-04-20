@@ -91,19 +91,19 @@
                             header-cell-class-name="table-header"
                             
                             >
-                            <el-table-column prop="id" label="志愿者编号" width="100" align="center"></el-table-column>
-                            <el-table-column prop="name" label="志愿者姓名" align="center" width="100"></el-table-column>
-                            <el-table-column prop="phone" label="志愿者电话" align="center"></el-table-column>
-                            <el-table-column prop="gender" label="志愿者性别" align="center" width="100" >
+                            <el-table-column prop="id" label="志愿者编号" align="center"></el-table-column>
+                            <el-table-column prop="name" label="志愿者姓名" align="center" ></el-table-column>
+                            <el-table-column prop="phone" label="志愿者电话" align="center" width="120px"></el-table-column>
+                            <el-table-column prop="gender" label="志愿者性别" align="center"  >
                                 <template slot-scope="scope">
                                     {{options[scope.row.gender]}}
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="idCard" label="志愿者身份证号" align="center" ></el-table-column>
-                            <el-table-column prop="volunteerHours" label="志愿者总工时" align="center" width="120" ></el-table-column>
-                            <el-table-column prop="volunteerScore" label="志愿者总分数" align="center" width="120" ></el-table-column>
-                            <el-table-column prop="volunteerNumber" label="志愿者志愿次数" align="center" width="120" ></el-table-column>
-                            <el-table-column prop="address" label="志愿者地址" align="center" ></el-table-column>
+                            <el-table-column prop="idCard" label="志愿者身份证号" align="center" width="200px" ></el-table-column>
+                            <el-table-column prop="volunteerHours" label="志愿者总工时" align="center" ></el-table-column>
+                            <el-table-column prop="volunteerScore" label="志愿者总分数" align="center" ></el-table-column>
+                            <el-table-column prop="volunteerNumber" label="志愿者志愿次数" align="center" ></el-table-column>
+                            <el-table-column prop="address" label="志愿者地址" align="center" width="300px"></el-table-column>
                         </el-table>
                             
                     </el-card>

@@ -54,9 +54,9 @@
                 class="table"
                 header-cell-class-name="table-header"
                 >
-                <el-table-column prop="activity.id" label="活动编号" width="100" align="center"></el-table-column>
+                <el-table-column prop="activity.id" label="活动编号" align="center"></el-table-column>
                 <el-table-column prop="activity.name" label="活动名" align="center"></el-table-column>
-                <el-table-column prop="activityStatus" label="活动状态" align="center">
+                <el-table-column prop="activityStatus" label="活动状态" width="200px" align="center">
                     <template slot-scope="scope">
                         <el-button v-if="scope.row.activityStatus=='招募中'" type="text"  @click="handleReview(scope.row)">招募中,去审核报名</el-button>
                         <el-button v-else-if="scope.row.activityStatus=='招募结束,活动未开始'||scope.row.activityStatus=='活动进行中'" type="text" style="color: green" @click="handleVolunteerInfo(scope.row)">{{scope.row.activityStatus+",查看人员信息"}}</el-button>
@@ -64,11 +64,11 @@
                         <el-lebal v-else >{{scope.row.activityStatus}}</el-lebal>
                     </template>
                 </el-table-column>
-                <el-table-column prop="activity.recruitNumber" label="计划招募人数" align="center" width="120" ></el-table-column>
-                <el-table-column prop="hasRecruitedNumber" label="已报名人数" align="center" width="100" ></el-table-column>
-                <el-table-column prop="hasAgreeNumber" label="已招募人数" align="center" width="100" ></el-table-column>
-                <el-table-column prop="activityTimeRange" label="活动时间" align="center"></el-table-column>
-                <el-table-column label="操作" width="250" align="center">
+                <el-table-column prop="activity.recruitNumber" label="计划招募人数" align="center"  ></el-table-column>
+                <el-table-column prop="hasRecruitedNumber" label="已报名人数" align="center" ></el-table-column>
+                <el-table-column prop="hasAgreeNumber" label="已招募人数" align="center" ></el-table-column>
+                <el-table-column prop="activityTimeRange" label="活动时间"  width="230px" align="center"></el-table-column>
+                <el-table-column label="操作"  align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"

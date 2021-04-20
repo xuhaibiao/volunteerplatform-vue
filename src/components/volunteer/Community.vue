@@ -41,7 +41,7 @@
                             <el-form ref="screenForm" :model="screenForm" label-width="80px">
                                 <el-form-item label="组织区域" prop="place">
                                     <el-row >
-                                        <el-col :span="12">
+                                        <el-col :span="14">
                                             <v-distpicker :province="screenForm.province" :city="screenForm.city" :area="screenForm.area" 
                                             @province="selectProvince" 
                                             @city="selectCity" 
@@ -49,7 +49,7 @@
                                             </v-distpicker>
                                         </el-col>
                                     
-                                        <el-col :span="12">
+                                        <el-col :span="10">
                                             <el-input  v-model="screenForm.communityName" placeholder="组织名" class="handle-input mr10" @keydown.enter.native="seachEnter"></el-input><input v-show="false"/>
                                             <el-button type="primary" icon="el-icon-search" @click="handleSearch" >搜索</el-button>
                                             <el-button type="primary" @click="reset">重置</el-button>
@@ -346,7 +346,7 @@ export default {
 }
 
 .handle-input {
-    width: 300px;
+    width: 200px;
    
 }
 .mr10 {

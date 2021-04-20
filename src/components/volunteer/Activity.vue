@@ -35,8 +35,8 @@
                         <div class="form-box">
                             <el-form ref="screenForm" :model="screenForm" label-width="80px">
                                 <el-form-item label="项目区域" prop="place">
-                                    <el-row >
-                                        <el-col :span="12">
+                                    <el-row>
+                                        <el-col :span="14">
                                             <v-distpicker :province="screenForm.province" :city="screenForm.city" :area="screenForm.area" 
                                             @province="selectProvince" 
                                             @city="selectCity" 
@@ -44,7 +44,7 @@
                                             </v-distpicker>
                                         </el-col>
                                     
-                                        <el-col :span="12">
+                                        <el-col :span="10">
                                             <el-input  v-model="screenForm.activityName" placeholder="活动名" class="handle-input mr10" @keydown.enter.native="seachEnter"></el-input><input v-show="false"/>
                                             <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
                                             <el-button type="primary" @click="reset">重置</el-button>
@@ -68,26 +68,26 @@
                     header-cell-class-name="table-header"
                     ref="configurationTable"
                     >
-                        <el-table-column prop="activity.id" label="活动编号" width="100" align="center"></el-table-column>
+                        <el-table-column prop="activity.id" label="活动编号"  align="center"></el-table-column>
                         <el-table-column prop="activity.name" label="活动名" align="center"></el-table-column>
                         <el-table-column prop="communityName" label="活动社区" align="center"></el-table-column>
-                        <el-table-column prop="activityStatus" label="活动状态" width="100" style="color: green" align="center">
+                        <el-table-column prop="activityStatus" label="活动状态"  style="color: green" align="center">
                             <template slot-scope="scope">
                                     <span v-if="scope.row.activityStatus==='招募中'" style="color: green">招募中</span>
                                     <span v-else style="color:red">{{scope.row.activityStatus}}</span>
                             </template>
                             
                         </el-table-column>
-                        <el-table-column prop="activity.recruitRange" label="面向人群" width="100" align="center">
+                        <el-table-column prop="activity.recruitRange" label="面向人群" align="center">
                             <template slot-scope="scope">
                                     {{options[scope.row.activity.recruitRange]}}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="activity.recruitNumber" label="计划招募人数" align="center" width="120" ></el-table-column>
-                        <el-table-column prop="hasRecruitedNumber" label="已报名人数" align="center" width="100" ></el-table-column>
-                        <el-table-column prop="hasAgreeNumber" label="已招募人数" align="center" width="100" ></el-table-column>
+                        <el-table-column prop="activity.recruitNumber" label="计划招募人数" align="center"  ></el-table-column>
+                        <el-table-column prop="hasRecruitedNumber" label="已报名人数" align="center"  ></el-table-column>
+                        <el-table-column prop="hasAgreeNumber" label="已招募人数" align="center"  ></el-table-column>
                         <el-table-column prop="activityTimeRange" label="活动时间" align="center"></el-table-column>
-                        <el-table-column label="操作" width="180" align="center">
+                        <el-table-column label="操作"  align="center">
                             <template slot-scope="scope">
                                 <el-button
                                     type="text"
@@ -452,7 +452,7 @@ export default {
 }
 
 .handle-input {
-    width: 300px;
+    width: 200px;
    
 }
 .mr10 {
