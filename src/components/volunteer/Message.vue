@@ -19,7 +19,7 @@
         <el-container>
             <el-aside :width="collapse ?'64px':'200px'">
                 <!--侧边栏菜单区 unique-opened="true" 只保持一个菜单展开 router开启路由-->
-                <el-menu default-active="message" background-color="#545c64" text-color="#fff" active-text-color="#409eff" 	unique-opened :collapse="isCollapse" :collapse-transition="false" :router="true">
+                <el-menu default-active="message" background-color="#EBF1F6" text-color="rgb(37, 35, 35);" active-text-color="#409eff" 	unique-opened :collapse="isCollapse" :collapse-transition="false" :router="true">
                     <template v-for="item in items">
                         <el-menu-item :index="item.index" :key="item.index">
                             <i :class="item.icon"></i>
@@ -143,7 +143,8 @@ export default {
         async getMessages(){
             const {data :res} = await this.$http.get("volunteer/message", {
                 params: {  
-                    "communityId": this.user.communityId
+                    "communityId": this.user.communityId,
+                    "volunteerId": this.user.id
                 }  
             });
             this.communityMessage = res.data.communityMessage;
@@ -159,12 +160,12 @@ export default {
 @import "//at.alicdn.com/t/font_2416161_nazgwdqmnsi.css";
 
 .el-header {
-  background-color: #373d41;
+  background-color: #EBF1F6;
   display: flex;
   justify-content: space-between;// 左右贴边
   padding-left: 0%;// 左边界
   align-items: center;// 水平
-  color: #fff;
+  color: rgb(37, 35, 35);
   font-size: 20px;
   div { //左侧div加布局
     display: flex;
@@ -174,6 +175,14 @@ export default {
     }
   }
   
+}
+.el-aside{
+    background-color: #EBF1F6;
+}
+.el-main{
+     /* background-image: url(./assets/img/main.png); */
+     background-color: #EBF1F6;
+
 }
 
 .message-title{

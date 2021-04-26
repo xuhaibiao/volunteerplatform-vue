@@ -12,6 +12,12 @@ import WorkerInformation from '../components/worker/Information.vue'
 import WorkerCommunity from '../components/worker/Community.vue'
 import WorkerMessage from '../components/worker/Message.vue'
 import Statistics from '../components/worker/Statistics.vue'
+import Home from '../components/administrator/Home.vue'
+import VolunteerAuthority from '../components/administrator/VolunteerAuthority.vue'
+import WorkerAuthority from '../components/administrator/WorkerAuthority.vue'
+import ActivityAuthority from '../components/administrator/ActivityAuthority.vue'
+import AdministratorMessage from '../components/administrator/Message.vue'
+
 
 
 Vue.use(VueRouter)
@@ -72,6 +78,27 @@ const routes = [
     component:Statistics
   },
 
+  {
+    path:"/administrator/home",
+    component:Home
+  },
+  {
+    path:"/administrator/volunteerAuthority",
+    component:VolunteerAuthority
+  },
+  {
+    path:"/administrator/workerAuthority",
+    component:WorkerAuthority
+  },
+  {
+    path:"/administrator/activityAuthority",
+    component:ActivityAuthority
+  },
+  {
+    path:"/administrator/message",
+    component:AdministratorMessage
+  },
+  
   
 ]
 

@@ -28,7 +28,7 @@
   }
 </script>
 
-<style>
+<style  lang="less" scoped>
 .el-table--border th.gutter:last-of-type {
     display: block!important;
     width: 17px!important;
@@ -38,11 +38,7 @@
   color: #42b983;
 }
 
-.el-main{
-     background-image: url(./assets/img/main.png);
-}
 
-.el-menu{
-    width: 200px !important;
-}
+
+
 </style>

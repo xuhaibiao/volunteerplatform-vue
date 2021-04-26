@@ -87,7 +87,7 @@ export default {
                         // 路由
                         this.$router.push({ path: "/worker/activityManagement"});
                     }else{
-                        this.$router.push({ path: "/administrator/activity"});
+                        this.$router.push({ path: "/administrator/home"});
                     }
                     
                 }else{

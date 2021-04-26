@@ -5,8 +5,10 @@ import './plugins/element.js'
 import './assets/css/global.css'
 import './assets/font/iconfont.css'
 import axios from 'axios'
+import echarts from 'echarts'
 
 
+Vue.prototype.$echarts = echarts
 
 // 挂载axios 到Vue的原型prototype的$http
 Vue.prototype.$http = axios
