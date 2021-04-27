@@ -138,7 +138,7 @@
             </el-dialog>
             
             <!-- 发布弹出框 -->
-            <el-dialog title="发布活动" :visible.sync="addVisible" width="40%">
+            <el-dialog title="发布活动" :visible.sync="addVisible" width="60%">
                 <el-form ref="addActivityForm" :model="addActivityForm" :rules="addActivityRules" label-width="110px">
                     <el-form-item label="活动名" prop="name" style="width: 60%">
                         <el-input v-model="addActivityForm.name" type="integer"></el-input>

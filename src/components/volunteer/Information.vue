@@ -97,7 +97,7 @@
             </el-main>
              <!-- 编辑弹出框 -->
             <el-dialog title="信息编辑" :visible.sync="editVisible" width="30%">
-                <el-form ref="editForm" :model="editForm" label-width="100px">
+                <el-form ref="editForm" :model="editForm" label-width="25%">
                     <el-form-item label="姓名:">
                         <el-input v-model="editForm.name"></el-input>
                     </el-form-item>

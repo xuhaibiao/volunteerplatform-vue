@@ -130,7 +130,7 @@
                 </div>
             </el-main>
             <!-- 详情弹出框 -->
-            <el-dialog title="活动详情" :visible.sync="infoVisible" width="30%">
+            <el-dialog title="活动详情" :visible.sync="infoVisible" >
                 <el-form ref="info" :model="info" label-width="100px">
                     <el-form-item label="活动名">
                         <el-lebal v-model="info.activity.name">{{info.activity.name}}</el-lebal>

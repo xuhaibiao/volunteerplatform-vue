@@ -99,7 +99,7 @@
                
             </el-main>
              <!-- 详情弹出框 -->
-            <el-dialog title="活动详情" :visible.sync="infoVisible" width="30%">
+            <el-dialog title="活动详情" :visible.sync="infoVisible">
                 <el-form ref="info" :model="info" label-width="100px">
                     <el-form-item label="活动编号">
                         <el-lebal v-model="info.activityResponse.activity.id">{{info.activityResponse.activity.id}}</el-lebal>

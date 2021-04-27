@@ -55,22 +55,22 @@
             <el-main>
                 <el-row :gutter="20">
                     <el-col :span="10">
-                        <el-card shadow="hover"  style="height:300px;  background: #EAEDF1 " >
-                            <div id="fiveYearNumEchart" :style="{width: '500px', height: '300px'}" ></div>
+                        <el-card shadow="hover"  class="mgb20" style="height:300px;  background: #EAEDF1 " >
+                            <div id="fiveYearNumEchart" :style="{width: '100%', height: '300px'}" ></div>
                         </el-card>
                     </el-col>
 
                     <el-col :span="10">
-                        <el-card shadow="hover"  style="height:300px;  background: #EAEDF1;" >
-                            <div id="sexRatioEchart" :style="{width: '500px', height: '300px'}" ></div>
+                        <el-card shadow="hover" class="mgb20" style="height:300px;  background: #EAEDF1;" >
+                            <div id="sexRatioEchart" :style="{width: '100%', height: '300px'}" ></div>
                         </el-card>
                     </el-col>
 
                 </el-row>   
                 <el-row :gutter="20" >
-                    <el-col :span="13">
+                    <el-col :span="20">
                         <el-card shadow="hover"  class="mgb20" style="height:600px;  background: #EAEDF1; text-align: center;" >
-                            <div id="chinaMapEchart" :style="{width: '800px', height: '600px'}" ></div>
+                            <div id="chinaMapEchart" :style="{width: '100%', height: '580px',margin: auto}" ></div>
                         </el-card>
                     </el-col>
                 </el-row>   
@@ -183,7 +183,7 @@ export default {
                     {
                         name: '性别',
                         type: 'pie',
-                        radius: ['20%', '70%'],
+                        radius: ['20%', '60%'],
                         avoidLabelOverlap: false,
                         itemStyle: {
                             borderRadius: 10,
@@ -199,7 +199,7 @@ export default {
                         emphasis: {
                             label: {
                                 show: true,
-                                fontSize: '20',
+                                fontSize: '10',
                                 fontWeight: 'bold'
                             }
                         },
@@ -444,7 +444,9 @@ export default {
    
 }
 
-
+.mgb20 {
+    margin-bottom: 20px;
+}
 .distpicker-address-wrapper {
   select {
     padding: 0px 10px !important;

@@ -99,11 +99,11 @@
                                     {{options[scope.row.gender]}}
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="idCard" label="志愿者身份证号" align="center" width="200px" ></el-table-column>
+                            <el-table-column prop="idCard" label="志愿者身份证号" align="center"  ></el-table-column>
                             <el-table-column prop="volunteerHours" label="志愿者总工时" align="center" ></el-table-column>
                             <el-table-column prop="volunteerScore" label="志愿者总分数" align="center" ></el-table-column>
                             <el-table-column prop="volunteerNumber" label="志愿者志愿次数" align="center" ></el-table-column>
-                            <el-table-column prop="address" label="志愿者地址" align="center" width="300px"></el-table-column>
+                            <el-table-column prop="address" label="志愿者地址" align="center" ></el-table-column>
                         </el-table>
                             
                     </el-card>
@@ -129,21 +129,21 @@
        
 
             <!-- 申请加入列表弹出框 -->
-            <el-dialog title="报名情况" :visible.sync="joinListVisible" width="80%" >
+            <el-dialog title="报名情况" :visible.sync="joinListVisible" width="100%" >
                 <el-table
                 :data="joinListData"
                 border
                 class="table"
                 header-cell-class-name="table-header"
                 >
-                    <el-table-column prop="volunteer.id" label="志愿者编号" width="100" align="center"></el-table-column>
-                    <el-table-column prop="volunteer.name" label="志愿者姓名" align="center"  width="200"></el-table-column>
+                    <el-table-column prop="volunteer.id" label="志愿者编号" align="center"></el-table-column>
+                    <el-table-column prop="volunteer.name" label="志愿者姓名" align="center"  ></el-table-column>
                     <el-table-column prop="volunteer.idCard" label="志愿者身份证号" align="center"></el-table-column>
-                    <el-table-column prop="volunteer.volunteerHours" label="志愿工时" align="center"  width="150"></el-table-column>
-                    <el-table-column prop="volunteer.volunteerScore" label="志愿总分" align="center"  width="150"></el-table-column>
-                    <el-table-column prop="volunteer.volunteerNumber" label="志愿次数" align="center"  width="150"></el-table-column>
-                    <el-table-column prop="message.createTime" label="申请时间" align="center"  width="350"></el-table-column>
-                    <el-table-column label="操作" width="150" align="center">
+                    <el-table-column prop="volunteer.volunteerHours" label="志愿工时" align="center"  ></el-table-column>
+                    <el-table-column prop="volunteer.volunteerScore" label="志愿总分" align="center" ></el-table-column>
+                    <el-table-column prop="volunteer.volunteerNumber" label="志愿次数" align="center"  ></el-table-column>
+                    <el-table-column prop="message.createTime" label="申请时间" align="center"  ></el-table-column>
+                    <el-table-column label="操作" align="center">
                         <template slot-scope="scope">
                             <!-- <el-button
                                 type="text"
