@@ -94,6 +94,15 @@ export default {
                     this.$message.error("登录失败！！！");
                 }
            });
+        },
+
+        signUp(){
+            const { href } = this.$router.resolve({
+                
+                path: '/register',
+                
+            });
+            window.open(href, '_blank');
         }
         
     }

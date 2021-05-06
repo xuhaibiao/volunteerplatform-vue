@@ -5,7 +5,7 @@
                <span> 社区志愿服务网</span>
            <!-- </div>
            <div> -->
-                <el-menu :default-active="activeIndex"  mode="horizontal" @select="handleSelect" >
+                <el-menu :default-active="1"  class="el-menu-demo" mode="horizontal" @select="handleSelect" >
                     <el-menu-item index="1">活动</el-menu-item>
                     <el-menu-item index="2">社区</el-menu-item>
                 </el-menu>  
@@ -20,7 +20,7 @@
                         <el-form ref="screenForm" :model="screenForm" label-width="80px">
                             <el-form-item label="项目区域" prop="place">
                                 <el-row>
-                                    <el-col :span="12">
+                                    <el-col :span="10" >
                                         <v-distpicker :province="screenForm.province" 
                                         @province="selectProvince" 
                                         hide-area
@@ -28,16 +28,17 @@
                                         </v-distpicker>
                                     </el-col>
                                 
-                                    <el-col :span="12">
-                                        <el-input  v-model="screenForm.activityName" placeholder="活动名" class="handle-input mr10" @keydown.enter.native="seachEnter"></el-input><input v-show="false"/>
-                                        <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-                                        <el-button type="primary" @click="reset">重置</el-button>
-                                    </el-col>
+                                    <el-col  :span="12" >
+                                    <el-input  v-model="screenForm.activityName" placeholder="活动名" class="handle-input mr10" @keydown.enter.native="seachEnter"></el-input><input v-show="false"/>
+                                    <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
+                                    <el-button type="primary" @click="reset">重置</el-button>
+                                </el-col>
                                     
                                     
                                 </el-row>
                                 
                             </el-form-item>
+                            
                         
                         </el-form>
                         
@@ -49,11 +50,25 @@
 
                     <div class="form-box">
                         <el-col :span="7"  v-for="l in list" v-bind:key="l.id">
-                            <el-card shadow="hover" class="card" :body-style="{ padding: '0px' }" v-cloak>
+                            <el-card shadow="hover" class="card" :body-style="{ padding: '0px' }" v-cloak @click.native="info(l.id)" >
                                 <img src="https://picsum.photos/id/1/300/200" class="image">
                                 <div style="padding: 14px;">
-                                    <el-lebal v-model="l.title">{{l.title}}</el-lebal>
-                                    <span><el-lebal v-model="l.value">{{l.value}}</el-lebal></span>
+                                <el-lebal v-model="l.title">{{l.title}}</el-lebal>
+                                    <div class="bottom clearfix">
+                                        <time class="time">{{"截止时间："+ currentDate }}</time>
+                                        
+                                    </div>
+                                    <div class="bottom clearfix">
+                                        <el-lebal v-model="l.value">{{l.value}}</el-lebal>
+                                    </div>
+                                    
+                                    
+                                        
+                                   
+                                   
+                                        
+                                    
+                                
                                 </div>
                             </el-card>
                         </el-col>
@@ -93,6 +108,7 @@ export default {
                 activityName:''
             
             },
+            currentDate: new Date(),
             list:[
                 {
                     id:1,
@@ -128,9 +144,8 @@ export default {
     },
     // 类似onload
     created() {
-        this.collapse = global.collapse;
-        this.user = JSON.parse(window.sessionStorage.getItem("user"));
-        this.getUserInfo();
+        
+        
     },
     methods:{
         logout(){
@@ -138,10 +153,16 @@ export default {
             this.$router.push("/login");
         },
         
-        collapseChage() {
-            this.collapse = !this.collapse;
-            global.collapse = !global.collapse;
-        },
+        info(id){
+            const { href } = this.$router.resolve({
+                name: "活动详情",
+                path: '/activityInfo',
+                query: {
+                    activityId: id 
+                }
+            });
+            window.open(href, '_blank');
+        }
 
         
     }
@@ -188,25 +209,53 @@ export default {
 .card {
     display: flex-start;
     // margin-bottom: 20px;
-    margin-left: 80px;
+    margin-left: 30px;
     margin-top: 30px;
     // height:250px; 
-    width: 300px; 
+    width: 100%; 
     // margin: auto;
-    background: #ffffff 
+    background: #ffffff ;
+    cursor: pointer;
 }
 
 .form-box{
     
     margin-bottom: 20px;
     height:10%; 
-    width: 60%; 
+    width: 90%; 
     margin: auto;
 }
 .handle-input {
     width: 300px;
    
 }
+
+  .time {
+    font-size: 13px;
+    color: #999;
+  }
+  
+  .bottom {
+    margin-top: 13px;
+    line-height: 12px;
+  }
+
+
+
+  .image {
+    width: 100%;
+    display: block;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+      display: table;
+      content: "";
+  }
+  
+  .clearfix:after {
+      clear: both
+  }
 </style>
 
 

@@ -18,7 +18,8 @@ import WorkerAuthority from '../components/administrator/WorkerAuthority.vue'
 import ActivityAuthority from '../components/administrator/ActivityAuthority.vue'
 import AdministratorMessage from '../components/administrator/Message.vue'
 import Index from '../components/Index.vue'
-
+import ActivityInfo from '../components/ActivityInfo.vue'
+import Register from '../components/Register.vue'
 
 
 
@@ -106,7 +107,15 @@ const routes = [
     path:"/index",
     component:Index
   },
-  
+  {
+    path:"/activityInfo",
+    name: "活动详情",
+    component:ActivityInfo
+  },
+  {
+    path:"/register",
+    component:Register
+  },
   
 ]
 
