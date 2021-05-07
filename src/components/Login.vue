@@ -4,24 +4,28 @@
             <!--添加表单-->
             <div class="ms-title">社区志愿服务系统</div>
             <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" class="ms-content" label-width="0px">
-                <el-form-item prop="username">
-                    <el-input v-model="loginForm.username">
-                        <el-button slot="prepend" icon="iconfont icon-denglu"></el-button>
+                <el-form-item prop="idCard">
+                    <el-input v-model="loginForm.idCard"  placeholder="请输入身份证号">
+                        <el-button slot="prepend" icon="iconfont icon-cardid"></el-button>
                     </el-input>
                 </el-form-item>
-                <el-form-item prop="password">
+                <el-form-item prop="password"  placeholder="请输入密码">
                     <el-input v-model="loginForm.password" type="password">
                         <el-button slot="prepend" icon="iconfont icon-mima"></el-button>
                     </el-input>
                 </el-form-item>
                 <el-form-item prop="userType">
-                    <el-select v-model="loginForm.type" placeholder="请选择">
+                    
+                    <el-select v-model="loginForm.type" placeholder="请选择用户类型">
+                        
                         <el-option
                         v-for="item in options"
                         :key="item.value"
                         :label="item.label"
                         :value="item.value">
+
                         </el-option>
+                        
                     </el-select>
                 </el-form-item>
                 <el-form-item class="btns">
@@ -39,14 +43,14 @@ export default {
     data(){
         return{
             loginForm:{
-                username:"wwwwww",
+                idCard:"",
                 password:"123456",
                 type:"1"
             },
             loginRules:{
-                username: [
-                    { required: true, message: "请输入用户名", trigger: "blur" },
-                    { min: 5, max: 8, message: "长度在 5 到 8 个字符", trigger: "blur" }
+                idCard: [
+                    { required: true, message: "请输入身份证号", trigger: "blur" },
+                    { len: 18, message: "长度为 18 位", trigger: "blur" }
                 ],
                 password: [
                     { required: true, message: "请输入密码", trigger: "blur" },
@@ -97,12 +101,13 @@ export default {
         },
 
         signUp(){
-            const { href } = this.$router.resolve({
+            this.$router.push({path: "/register"});
+
+            // const { href } = this.$router.resolve({
                 
-                path: '/register',
-                
-            });
-            window.open(href, '_blank');
+            //     path: '/register', 
+            // });
+            // window.open(href, '_blank');
         }
         
     }

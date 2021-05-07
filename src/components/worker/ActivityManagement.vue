@@ -638,7 +638,13 @@ export default {
             
         },
         handleAdd(){
-            this.addVisible = true;
+            if(this.user.communityId==-1){
+                this.$message.warning("您还未通过社区审核，不具有该权限");
+                return;
+            }else{
+                this.addVisible = true;
+            }
+            
         },
         cancelAdd(){
             this.addVisible = false;

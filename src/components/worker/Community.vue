@@ -131,7 +131,7 @@
             <!-- 申请加入列表弹出框 -->
             <el-dialog title="报名情况" :visible.sync="joinListVisible" width="100%" >
                 <el-table
-                :data="joinListData"
+                :data="volunteerJoinListData"
                 border
                 class="table"
                 header-cell-class-name="table-header"
@@ -142,6 +142,32 @@
                     <el-table-column prop="volunteer.volunteerHours" label="志愿工时" align="center"  ></el-table-column>
                     <el-table-column prop="volunteer.volunteerScore" label="志愿总分" align="center" ></el-table-column>
                     <el-table-column prop="volunteer.volunteerNumber" label="志愿次数" align="center"  ></el-table-column>
+                    <el-table-column prop="message.createTime" label="申请时间" align="center"  ></el-table-column>
+                    <el-table-column label="操作" align="center">
+                        <template slot-scope="scope">
+                            <!-- <el-button
+                                type="text"
+                                icon="el-icon-info"
+                                style="color:green"
+                                @click="handleInfo(scope.row)"
+                            >详情</el-button> -->
+                            <el-button type="text" icon="el-icon-check" @click="handleAgree(scope.$index, scope.row)">同意</el-button>
+                            <el-button type="text" icon="el-icon-close" style="color:red" @click="handleRefuse(scope.$index, scope.row)">拒绝</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+
+                <el-divider></el-divider>
+
+                <el-table
+                :data="workerJoinListData"
+                border
+                class="table"
+                header-cell-class-name="table-header"
+                >
+                    <el-table-column prop="worker.id" label="工作者编号" align="center"></el-table-column>
+                    <el-table-column prop="worker.name" label="工作者姓名" align="center"  ></el-table-column>
+                    <el-table-column prop="worker.idCard" label="工作者身份证号" align="center"></el-table-column>
                     <el-table-column prop="message.createTime" label="申请时间" align="center"  ></el-table-column>
                     <el-table-column label="操作" align="center">
                         <template slot-scope="scope">
@@ -249,9 +275,16 @@ export default {
               "女","男"
             
             ],
-            joinListData:[
+            volunteerJoinListData:[
                 {
                     volunteer:{},
+                    message:''
+                }
+            ],
+
+            workerJoinListData:[
+                {
+                    worker:{},
                     message:''
                 }
             ],
@@ -300,12 +333,18 @@ export default {
             
             const {data :res} = await this.$http.post("worker/community/agreeJoin",row.message);
             if (res.code == 1 ) {
-                this.joinListData.splice(index,1);
-                this.$message.success("同意加入成功！");
+                if(row.message.type == 1){
+                    this.volunteerJoinListData.splice(index,1);
+                    this.$message.success("同意加入成功！");
+                }else{
+                    this.workerJoinListData.splice(index,1);
+                    this.$message.success("同意加入成功！");
+                }
+                
                     
             }else {
                 if(res.flag == "-1"){
-                    this.joinListData.splice(index,1);
+                    this.volunteerJoinListData.splice(index,1);
                     this.$message.error(res.msg);
                 }else{
                     this.$message.error(res.msg);
@@ -319,8 +358,14 @@ export default {
             
             const {data :res} = await this.$http.post("worker/community/refuseJoin", row.message);
             if (res.code == 1 ) {
-                this.joinListData.splice(index,1);
-                this.$message.success("拒绝加入成功！");
+                if(row.message.type == 1){
+                    this.volunteerJoinListData.splice(index,1);
+                    this.$message.success("拒绝加入成功！");
+                }else{
+                    this.workerJoinListData.splice(index,1);
+                    this.$message.success("拒绝加入成功！");
+                }
+               
                     
             }else{
                 this.$message.error("拒绝加入失败！");
@@ -347,7 +392,9 @@ export default {
                     "communityId": this.communityInfo.id
                 }  
             });
-            this.joinListData = res.data;
+            console.log(res.data.workerJoinList);
+            this.volunteerJoinListData = res.data.volunteerJoinList;
+            this.workerJoinListData = res.data.workerJoinList;
             this.joinListVisible = true;
         },
 
