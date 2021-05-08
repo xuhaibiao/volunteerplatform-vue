@@ -7,11 +7,11 @@
            <div> -->
                 <el-menu :default-active="1"  class="el-menu-demo" mode="horizontal" @select="handleSelect" >
                     <el-menu-item index="1">活动</el-menu-item>
-                    <el-menu-item index="2">社区</el-menu-item>
+                    <!-- <el-menu-item index="2">社区</el-menu-item> -->
                 </el-menu>  
            </div>
         
-            <el-button type="info" @click="logout">安全退出</el-button>  
+            <el-button type="text"  @click="logout">去登录/注册</el-button>  
         </el-header>
 <!-- <div class="line"></div> -->
             <el-main>   

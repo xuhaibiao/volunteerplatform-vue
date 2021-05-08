@@ -2,7 +2,7 @@
     <div class="login-wrap">
         <div class="ms-login">
             <!--添加表单-->
-            <div class="ms-title">社区志愿服务系统</div>
+            <div class="ms-title">注册</div>
             <el-form ref="registerFormRef" :model="registerForm" :rules="registerRules" class="ms-content" label-width="0px">
                 <el-row>
                     <el-col :span="12">
@@ -145,7 +145,7 @@
                     
                 </el-row>
 
-                    <el-button type="primary" @click="download">test</el-button>
+                    
                 
                 
                 <el-form-item class="btns">
@@ -168,7 +168,7 @@ export default {
                 idCard:'333333333333333333',
                 username:'徐嗨嗨',
                 password:'123456',
-                type: '1',
+                type: '2',
                 gender: 1,
                 phone:'33333333333',
                 detailAddress:'测试村',
@@ -395,10 +395,13 @@ export default {
 .login-wrap {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: 900px;
     // background-image: url(../assets/img/login-bg.jpg);
     background-image: url(../assets/img/001.jpg);
-    background-size: 100%;
+    background-size: cover;
+    //  background-color: #a98175;
+    // background:#fff url(../assets/img/001.jpg) no-repeat;
+   
 }
 .ms-title {
     width: 100%;
@@ -411,9 +414,9 @@ export default {
 .ms-login {
     position: absolute;
     left: 20%;
-    top: 10%;
+    top: 5%;
     width: 800px;
-    // height: 50%;
+    // height: 100%;
     margin: -190px 0 0 -175px;
     margin: auto;
     border-radius: 5px;
@@ -423,14 +426,12 @@ export default {
 
 // 跟节点样式
 .login_container {
-//   background-color: #2b4b6b;
-//   height: 100%;
-//   background-image: url(../assets/img/login-bg.jpg);
+    //   background-color: #2b4b6b;
+    //   height: 100%;
     // position: relative;
     width: 100%;
     height: 100%;
-    background-image: url(../assets/img/login-bg.jpg);
-    background-size: 100%;
+    // background-size: 100%;
 }
 
 .btns {
@@ -447,6 +448,8 @@ export default {
 .el-input{
     width: 80%;
 }
+
+
 
 </style>
 

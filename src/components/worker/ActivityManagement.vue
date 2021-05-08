@@ -209,13 +209,13 @@
                                     @area="selectArea">
                         </v-distpicker>
                     </el-form-item>
-                    <el-form-item label="详细地址" prop="detailAddress"  style="width: 70%">
+                    <el-form-item label="详细地址" prop="detailAddress"  >
                         <el-input v-model="editActivityForm.detailAddress"></el-input>
                     </el-form-item>
-                    <el-form-item label="活动工时" prop="workingHours"  style="width: 30%">
+                    <el-form-item label="活动工时" prop="workingHours"  >
                         <el-input v-model.number="editActivityForm.workingHours"></el-input>
                     </el-form-item>
-                    <el-form-item label="招募人数" prop="recruitNumber"  style="width: 30%">
+                    <el-form-item label="招募人数" prop="recruitNumber"  >
                         <el-input v-model.number="editActivityForm.recruitNumber"></el-input>
                     </el-form-item>
                 
