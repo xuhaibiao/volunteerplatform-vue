@@ -112,9 +112,9 @@
                         </el-form-item>
                         <el-form-item prop="communityAddress" >
                             <v-distpicker
-                                    @province="selectProvince" 
-                                    @city="selectCity" 
-                                    @area="selectArea" style="margin-left:30px">
+                                    @province="selectCommunityProvince" 
+                                    @city="selectCommunityCity" 
+                                    @area="selectCommunityArea" style="margin-left:30px">
                             </v-distpicker>
                         </el-form-item>
                         <el-form-item prop="communityDetailAddress">
@@ -131,10 +131,12 @@
                             drag
                             action="http://localhost:9000/upload"
                             multiple
-                            accept=""
+                            accept=".pdf"
                             :on-success="uploadResult"
                             :on-preview="handlePreview"
+                            :on-change="addFile"
                             limit="1"
+                            :before-remove="removeFile"
                             :auto-upload="false"
                             >
                             <i class="el-icon-upload" ></i>
@@ -172,19 +174,20 @@ export default {
                 gender: 1,
                 phone:'33333333333',
                 detailAddress:'测试村',
-                province: '省', 
-                city: '市',
-                area: '区' ,
+                province: '浙江省', 
+                city: '绍兴市',
+                area: '柯桥区' ,
                 joinCommunityInfo: '',
                 community:{
-                    name:'',
-                    province: '省', 
-                    city: '市',
-                    area: '区' ,
-                    detailAddress:''
+                    name:'1',
+                    province: '浙江省', 
+                    city: '绍兴市',
+                    area: '柯桥区' ,
+                    detailAddress:'1'
                 }
                 
             },
+            file: null,
             communities: [],
             registerRules:{
                 username: [
@@ -231,9 +234,12 @@ export default {
             
     },
     created(){
-        this.registerForm.province="省";
-        this.registerForm.city="市";
-        this.registerForm.area="区";
+        this.registerForm.province="浙江省";
+        this.registerForm.city="绍兴市";
+        this.registerForm.area="柯桥区";
+        this.registerForm.community.province="浙江省";
+        this.registerForm.community.city="绍兴市";
+        this.registerForm.community.area="柯桥区";
         this.loadAll();
        
     },
@@ -243,17 +249,30 @@ export default {
         },
      
         selectProvince(value) {
-            this.registerForm.province = value.value
+            this.registerForm.province = value.value;
     
         },
         selectCity(value) {
-            this.registerForm.city = value.value
+            this.registerForm.city = value.value;
            
         },
         selectArea(value) {
-            this.registerForm.area = value.value
+            this.registerForm.area = value.value;
             
         },
+        selectCommunityProvince(value) {
+            this.registerForm.community.province = value.value;
+    
+        },
+        selectCommunityCity(value) {
+            this.registerForm.community.city = value.value;
+           
+        },
+        selectCommunityArea(value) {
+            this.registerForm.community.area = value.value;
+            
+        },
+        
 
         confirmSignUp(){
            this.$refs.registerFormRef.validate(async valid=>{
@@ -293,13 +312,33 @@ export default {
                         
                     }else{
                         // 工作者（创建社区）
+                        // this.$refs.upload.submit();
+                        if(this.registerForm.community.name == ""||this.registerForm.community.detailAddress==""
+                                    ||this.registerForm.community.province == '省'||this.registerForm.community.city == '市'||this.registerForm.community.area == '区'){
+                            this.$message.error("请填写完整的社区信息！");
+                            return;
+                        }else{
+                            if(this.file == null){
+                                this.$message.error("请上传创建社区所需材料！");
+                                return;
+                            }
+                            const {data :res} = await this.$http.post("signUp", this.registerForm);
+                            if(res.code==2){
+                                this.$message.error(res.msg);
+                                return;
+                            }else{
+                                //todo 上传创建社区材料，管理员审核
+                            }
+                            // this.$refs.upload.submit();
+
+                        }
+
 
                     }
                 }
                 
                 
            });
-        //    this.$refs.upload.submit();
         },
 
         communitiesContainStr(arr, str){
@@ -317,8 +356,13 @@ export default {
             }
             // window.open(response.data);
         },
-
-       querySearch(queryString, cb) {
+        addFile(file,fileList){
+            this.file = file;
+        },
+        removeFile(file,fileList){
+            this.file = null;
+        },
+        querySearch(queryString, cb) {
             var communities = this.communities;
             var results = queryString ? communities.filter(this.createFilter(queryString)) : communities;
             // 调用 callback 返回建议列表的数据
