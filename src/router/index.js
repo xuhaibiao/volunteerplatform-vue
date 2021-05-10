@@ -17,9 +17,12 @@ import VolunteerAuthority from '../components/administrator/VolunteerAuthority.v
 import WorkerAuthority from '../components/administrator/WorkerAuthority.vue'
 import ActivityAuthority from '../components/administrator/ActivityAuthority.vue'
 import AdministratorMessage from '../components/administrator/Message.vue'
+import CommunityReview from '../components/administrator/CommunityReview.vue'
 import Index from '../components/Index.vue'
 import ActivityInfo from '../components/ActivityInfo.vue'
 import Register from '../components/Register.vue'
+
+
 
 
 
@@ -102,6 +105,12 @@ const routes = [
     path:"/administrator/message",
     component:AdministratorMessage
   },
+  {
+    path:"/administrator/communityReview",
+    component:CommunityReview
+  },
+
+  
 
   {
     path:"/index",

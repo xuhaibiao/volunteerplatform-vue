@@ -106,7 +106,7 @@
                 <el-row v-if="registerForm.type==2">
                     <el-col :span="12">
                         <el-form-item prop="communityName" >
-                            <el-input v-model="registerForm.community.name" style="margin-left:30px" placeholder="请输入社区名">
+                            <el-input v-model="registerForm.communityName" style="margin-left:30px" placeholder="请输入社区名">
                                 <el-button slot="prepend" icon="iconfont icon-zuzhi"></el-button>
                             </el-input>
                         </el-form-item>
@@ -118,31 +118,34 @@
                             </v-distpicker>
                         </el-form-item>
                         <el-form-item prop="communityDetailAddress">
-                            <el-input v-model="registerForm.community.detailAddress" style="margin-left:30px;"  placeholder="请输入区级以下地址  ">
+                            <el-input v-model="registerForm.communityDetailAddress" style="margin-left:30px;"  placeholder="请输入区级以下地址  ">
                                 <el-button slot="prepend" icon="iconfont icon-dizhi"></el-button>
                             </el-input>
                         </el-form-item>
 
                     </el-col>
-                     <el-col :span="12">                       
-                        <el-upload
-                            ref="upload"
-                            class="upload-demo"
-                            drag
-                            action="http://localhost:9000/upload"
-                            multiple
-                            accept=".pdf"
-                            :on-success="uploadResult"
-                            :on-preview="handlePreview"
-                            :on-change="addFile"
-                            limit="1"
-                            :before-remove="removeFile"
-                            :auto-upload="false"
-                            >
-                            <i class="el-icon-upload" ></i>
-                            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                            <div class="el-upload__tip" slot="tip">只能上传pdf文件，且不超过100MB</div>
-                        </el-upload>
+                     <el-col :span="12">        
+                        <el-form-item prop="file" >               
+                            <el-upload
+                                ref="upload"
+                                class="upload-demo"
+                                drag
+                                action="http://localhost:9000/signUp"
+                                multiple
+                                accept=".pdf"
+                                :on-success="uploadResult"
+                                :on-preview="handlePreview"
+                                :on-change="addFile"
+                                limit="1"
+                                :before-remove="removeFile"
+                                :auto-upload="false"
+                                :data="registerForm"
+                                >
+                                <i class="el-icon-upload" ></i>
+                                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                                <div class="el-upload__tip" slot="tip">只能上传pdf文件，且不超过100MB</div>
+                            </el-upload>
+                        </el-form-item>
                     </el-col>
                     
                 </el-row>
@@ -178,13 +181,19 @@ export default {
                 city: '绍兴市',
                 area: '柯桥区' ,
                 joinCommunityInfo: '',
-                community:{
-                    name:'1',
-                    province: '浙江省', 
-                    city: '绍兴市',
-                    area: '柯桥区' ,
-                    detailAddress:'1'
-                }
+                communityName:'1',
+                communityProvince:'',
+                communityCity:'',
+                communityArea:'',
+                communityDetailAddress:'1',
+                
+                // community:{
+                //     name:'1',
+                //     province: '浙江省', 
+                //     city: '绍兴市',
+                //     area: '柯桥区' ,
+                //     detailAddress:'1'
+                // }
                 
             },
             file: null,
@@ -237,9 +246,9 @@ export default {
         this.registerForm.province="浙江省";
         this.registerForm.city="绍兴市";
         this.registerForm.area="柯桥区";
-        this.registerForm.community.province="浙江省";
-        this.registerForm.community.city="绍兴市";
-        this.registerForm.community.area="柯桥区";
+        this.registerForm.communityProvince="浙江省";
+        this.registerForm.communityCity="绍兴市";
+        this.registerForm.communityArea="柯桥区";
         this.loadAll();
        
     },
@@ -261,22 +270,22 @@ export default {
             
         },
         selectCommunityProvince(value) {
-            this.registerForm.community.province = value.value;
+            this.registerForm.communityProvince = value.value;
     
         },
         selectCommunityCity(value) {
-            this.registerForm.community.city = value.value;
+            this.registerForm.communityCity = value.value;
            
         },
         selectCommunityArea(value) {
-            this.registerForm.community.area = value.value;
+            this.registerForm.communityArea = value.value;
             
         },
         
 
         confirmSignUp(){
            this.$refs.registerFormRef.validate(async valid=>{
-               if (!valid) return;
+                if (!valid) return;
                 // 调用post请求
                 if(this.registerForm.province == '省'||this.registerForm.city == '市'||this.registerForm.area == '区'){
                         this.$message.error("请填写完整的省市区地址！");
@@ -313,8 +322,8 @@ export default {
                     }else{
                         // 工作者（创建社区）
                         // this.$refs.upload.submit();
-                        if(this.registerForm.community.name == ""||this.registerForm.community.detailAddress==""
-                                    ||this.registerForm.community.province == '省'||this.registerForm.community.city == '市'||this.registerForm.community.area == '区'){
+                        if(this.registerForm.communityName == ""||this.registerForm.communityDetailAddress==""
+                                    ||this.registerForm.communityProvince == '省'||this.registerForm.communityCity == '市'||this.registerForm.communityArea == '区'){
                             this.$message.error("请填写完整的社区信息！");
                             return;
                         }else{
@@ -322,15 +331,7 @@ export default {
                                 this.$message.error("请上传创建社区所需材料！");
                                 return;
                             }
-                            const {data :res} = await this.$http.post("signUp", this.registerForm);
-                            if(res.code==2){
-                                this.$message.error(res.msg);
-                                return;
-                            }else{
-                                //todo 上传创建社区材料，管理员审核
-                            }
-                            // this.$refs.upload.submit();
-
+                            this.$refs.upload.submit();
                         }
 
 
@@ -352,7 +353,10 @@ export default {
         uploadResult(response, file, fileList){
             console.log(response);
             if(response.code == 2){
-                this.$message.error("注册失败，原因为："+response.msg);
+                this.$message.error(response.msg);
+            }else{
+                this.$message.success("注册成功！");
+                this.routerToPage("/login");
             }
             // window.open(response.data);
         },
@@ -393,41 +397,6 @@ export default {
                 loading.close();
             }, 3000);
         },
-
-    //     async download(){
-    //         let res = await this.$http.get("download",{
-    //             responseType: 'blob',
-    //             params: {  
-    //                 "fileName": 'xhb.pdf',
-    //                 "fileDate": '2021-05-06',
-    //             }  
-    //          });
-    //         if (res) {
-    //             var fileName = 'xhb.pdf';
-    //             //eslint-disable-next-line
-    //             const blob = new Blob([res.data], {
-    //                 // 如何后端没返回下载文件类型，则需要手动设置：type: 'application/pdf;chartset=UTF-8' 表示下载文档为pdf，如果是word则设置为msword，excel为excel
-    //                 type: 'application/pdf;chartset=UTF-8'
-    //             });
-    //             //对于<a>标签，只有 Firefox 和 Chrome（内核） 支持 download 属性
-    //             //IE10以上支持blob但是依然不支持download
-    //             if ('download' in document.createElement('a')) { 
-    //                 //支持a标签download的浏览器
-    //                 const link = document.createElement('a')//创建a标签
-    //                 link.download = fileName//a标签添加属性
-    //                 link.style.display = 'none'
-    //                 link.href = URL.createObjectURL(blob)
-    //                 document.body.appendChild(link)
-    //                 link.click()//执行下载
-    //                 URL.revokeObjectURL(link.href) //释放url
-    //                 document.body.removeChild(link)//释放标签
-            
-    //             }else{
-    //                 navigator.msSaveBlob(blob, fileName)
-    //             }
-
-    //         }
-    //     }
 
     }
 }

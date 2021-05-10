@@ -155,6 +155,11 @@ export default {
                     icon: 'iconfont icon-geren1'
                 },
                 {
+                    index: 'communityReview',
+                    title: '    新建社区审核',
+                    icon: 'iconfont icon-icon-test'
+                },
+                {
                     index: 'message',
                     title: '    消息',
                     icon: 'iconfont icon-xiaoxi'
