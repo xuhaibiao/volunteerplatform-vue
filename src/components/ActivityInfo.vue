@@ -7,38 +7,46 @@
            <div> -->
                 <el-menu :default-active='1' class="el-menu-demo" mode="horizontal" @select="handleSelect" >
                     <el-menu-item index="1">活动</el-menu-item>
-                    <el-menu-item index="2">社区</el-menu-item>
+                    <!-- <el-menu-item index="2">社区</el-menu-item> -->
                 </el-menu>  
            </div>
-        
-            <el-button type="info" @click="logout">安全退出</el-button>  
+
         </el-header>
 
             <el-main>  
                 <el-row>
-                    <el-col :span="8">
+                    <el-col :span="10">
                         <div class="card-box">
                             <el-card shadow="hover" class="card" :body-style="{ padding: '0px' }" v-cloak>
-                                <img src="https://picsum.photos/id/1/300/200" class="image">
+                                <el-image    
+                                    :src="activityInfo.picUrl" 
+                                    >
+                                </el-image>
                                 <div style="padding: 14px;">
-                                <el-lebal v-model="l.title">{{l.title}}</el-lebal>
+                                <el-lebal>{{this.activityInfo.activity.name}}</el-lebal>
                                     <div class="bottom clearfix">
-                                        <time class="cardContent">{{"报名时间："+ currentDate }}</time>
-                                        
+                                        <time class="cardContent">{{"招募时间："+ activityInfo.recruitTimeRange}}</time>
                                     </div>
                                     <div class="bottom clearfix">
-                                        <el-lebal class="cardContent" v-model="l.value">{{"地点："+ l.value}}</el-lebal>
+                                        <time class="cardContent">{{"活动时间："+ activityInfo.activityTimeRange}}</time>
                                     </div>
                                     <div class="bottom clearfix">
-                                        <el-lebal class="cardContent"  v-model="l.value">{{"发起组织："+ l.value}}</el-lebal>
+                                        <el-lebal class="cardContent">{{"地点："+ activityInfo.activity.province +" "+ activityInfo.activity.city+" "+ activityInfo.activity.area+" "+ activityInfo.activity.detailAddress}}</el-lebal>
                                     </div>
                                     <div class="bottom clearfix">
-                                        <el-lebal  class="cardContent" v-model="l.value">{{"联系人："+ l.value}}</el-lebal>
+                                        <el-lebal class="cardContent" >{{"发起社区："+ activityInfo.communityName}}</el-lebal>
                                     </div>
                                     <div class="bottom clearfix">
-                                        <el-lebal  class="cardContent" v-model="l.value">{{"联系方式："+ l.value}}</el-lebal>
+                                        <el-lebal  class="cardContent">{{"联系人："+ activityInfo.sponsor}}</el-lebal>
                                     </div>
-                                    
+                                    <div class="bottom clearfix">
+                                        <el-lebal  class="cardContent" >{{"联系方式："+ activityInfo.sponsorPhoneNumber}}</el-lebal>
+                                    </div>
+                                    <div class="bottom clearfix">
+                                        <el-lebal  class="cardContent">活动状态：</el-lebal>
+                                        <el-lebal v-if="activityInfo.activityStatus==='招募中'" style="color: green">招募中</el-lebal>
+                                        <el-lebal v-else style="color: red">{{activityInfo.activityStatus}}</el-lebal>
+                                    </div>
                                     
                                 </div>
                             </el-card>
@@ -47,16 +55,42 @@
                     </el-col>
                 
                     
-                    <el-col :span="16">
+                    <el-col :span="14">
                         <div class = "info-box">
                             <span>活动详情</span>
                             <el-divider></el-divider>
-                            <el-form  label-width="80px">
-                                <el-form-item label="活动时间:">
-                                    <el-label>2021.1.1-2021.1.1</el-label>
+                            
+                            <el-form  >
+                                <el-form-item label="招募面向人群:">
+                                    <el-label>{{recruitType[activityInfo.activity.recruitRange]}}</el-label>
                                 </el-form-item>
-
                             </el-form>
+                            <el-form  >
+                                <el-form-item label="活动计划招募人数:">
+                                    <el-label>{{activityInfo.activity.recruitNumber+"人"}}</el-label>
+                                </el-form-item>
+                            </el-form>
+                            <el-form  >
+                                <el-form-item label="活动已报名人数:">
+                                    <el-label>{{activityInfo.hasRecruitedNumber+"人"}}</el-label>
+                                </el-form-item>
+                            </el-form>
+                            <el-form >
+                                <el-form-item label="活动报名已通过人数:">
+                                    <el-label>{{activityInfo.hasAgreeNumber+"人"}}</el-label>
+                                </el-form-item>
+                            </el-form>
+                            <el-form >
+                                <el-form-item label="活动名:">
+                                    <el-label>{{activityInfo.activity.name}}</el-label>
+                                </el-form-item>
+                            </el-form>
+                            <el-form  >
+                                <el-form-item label="活动内容:">
+                                    <el-label>{{activityInfo.activity.content}}</el-label>
+                                </el-form-item>
+                            </el-form>
+                            
                         </div>
                     </el-col>
                 </el-row>
@@ -74,7 +108,7 @@ export default {
 
     data(){
         return{
-           
+           recruitType: ["社区内部志愿者","全国志愿者"],
     
             currentDate: new Date(),
             l:
@@ -84,7 +118,9 @@ export default {
                     value:1
                 },
                 
-               
+            activityInfo:{
+                activity:{}
+            }
            
             
         };
@@ -95,14 +131,15 @@ export default {
         
     },
     methods:{
-        logout(){
-            window.sessionStorage.clear();
-            this.$router.push("/login");
-        },
         
-        getActivity(){
+        async getActivity(){
             var activityId = this.$route.query.activityId;
-            
+            const {data:res} = await this.$http.get("volunteer/activityInfo",{
+                params: {  
+                    "activityId": activityId,
+                }  
+            });
+            this.activityInfo = res.data;
         },
 
         

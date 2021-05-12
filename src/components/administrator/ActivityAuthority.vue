@@ -60,7 +60,7 @@
                     style="width: 100%"
                     ref="configurationTable"
                     >
-                        <el-table-column type="expand">
+                        <!-- <el-table-column type="expand">
                             <template slot-scope="props">
                                 <el-form label-position="left" inline class="demo-table-expand">
                                     <el-form-item label="活动内容" >
@@ -84,19 +84,24 @@
                                     </el-form-item>
                                 </el-form>
                             </template>
-                        </el-table-column>
-                        <el-table-column prop="id" label="活动编号" align="center"></el-table-column>
-                        <el-table-column prop="name" label="活动名" align="center"></el-table-column>
+                        </el-table-column> -->
+                        <el-table-column prop="activity.id" label="活动编号" align="center"></el-table-column>
+                        <el-table-column prop="activity.name" label="活动名" align="center"></el-table-column>
                         <el-table-column prop="createTime" label="创建时间" align="center"></el-table-column>
+                        <el-table-column prop="info" label="详细信息"  align="center">
+                            <template slot-scope="scope">
+                                <el-button type="text"  @click="handleInfo(scope.row.activity.id)">详情</el-button>
+                            </template>
+                        </el-table-column>
                         <el-table-column prop="banStatus" label="封禁状态"  align="center">
                             <template slot-scope="scope">
                                 <el-switch
-                                v-model="scope.row.hasDeleted"
+                                v-model="scope.row.activity.hasDeleted"
                                 :active-value= '1' 
                                 :inactive-value= '0'
                                 active-text="已删除"
                                 inactive-text="正常"
-                                @change="handleBanStatus(scope.$index, scope.row)"
+                                @change="handleBanStatus(scope.$index, scope.row.activity)"
                                 >
                                 </el-switch>
                             </template>
@@ -269,21 +274,26 @@ export default {
             // if( res.status != 200) return this.$message.error("操作失败！！！");
             
         },
-        
-        collapseChage() {
-            this.collapse = !this.collapse;
-            global.collapse = !global.collapse;
+        handleInfo(id) {
+            const { href } = this.$router.resolve({
+                name: "活动详情",
+                path: '/activityInfo',
+                query: {
+                    activityId: id,
+
+                }
+            });
+            window.open(href, '_blank');
+    
         },
         
+      
         handleBanStatus(index, row){
-            alert(row.hasDeleted);
             if(row.hasDeleted == 1){
-                 alert("变成删除");
                 this.changeStatusForm.activity = row;
                 this.changeStatusForm.index = index;
                 this.reasonVisible = true;
             }else{
-                alert("变成正常");
                 this.changeStatusForm.activity = row;
                 this.changeToNormal(this.changeStatusForm);
                 

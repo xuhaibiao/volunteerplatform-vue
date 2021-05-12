@@ -32,16 +32,54 @@
                 :data="tableData.slice((currentPage-1)*pagesize,currentPage*pagesize)"
                 style="width: 100%"
                 >
-                <el-table-column prop="activityId" label="活动编号" width="80" align="center"></el-table-column>
+                <el-table-column type="expand">
+                    <template slot-scope="props">
+                        <el-form label-position="left" inline class="demo-table-expand" label-width="180px">
+                            <el-form-item label="活动编号" >
+                                <span>{{ props.row.activityId }}</span>
+                            </el-form-item>
+                            <el-form-item label="活动名">
+                                <span>{{ props.row.activityName}}</span>
+                            </el-form-item>
+                            <el-form-item label="志愿者姓名">
+                                <span>{{ props.row.volunteerName }}</span>
+                            </el-form-item>
+                            <el-form-item label="志愿者身份证">
+                                <span>{{ props.row.volunteerIdCard }}</span>
+                            </el-form-item>
+                            <el-form-item label="志愿者给出评分">
+                                <span>{{ props.row.volunteerEvaluateScore }}</span>
+                            </el-form-item>
+                            <el-form-item label="志愿者志愿描述及评价">
+                                <span>{{ props.row.volunteerEvaluatContent }}</span>
+                            </el-form-item>
+                        </el-form>
+                    </template>
+                </el-table-column>
                 <el-table-column prop="activityName" label="活动名" align="center"></el-table-column>
-                <el-table-column prop="volunteerName" label="志愿者" align="center"></el-table-column>
-                <el-table-column label="评价" width="280" align="center">
+                <el-table-column prop="volunteerName" label="志愿者姓名" align="center"></el-table-column>
+                <el-table-column prop="picUrl" label="志愿照片" align="center">
                     <template slot-scope="scope">
-                        <div>
-                            <el-rate v-model="scope.row.evaluateScore"></el-rate>
-                            <el-button type="text" icon="el-icon-check" @click="handleEvaluate(scope.$index, scope.row)"></el-button>
+                        <div class="demo-image__preview">
+                        <el-image 
+                            style="width: 100px; height: 100px"
+                            :src="scope.row.picUrl" 
+                            :preview-src-list="[scope.row.picUrl]">
+                        </el-image>
                         </div>
-                        
+                    </template>
+                </el-table-column>
+                <el-table-column label="给出您的评分" width="280" align="center">
+                    <template slot-scope="scope">
+                        <el-rate v-model="scope.row.evaluateScore"></el-rate>
+                            <!-- <el-button type="text" icon="el-icon-check" @click="handleEvaluate(scope.$index, scope.row)"></el-button> -->
+                    </template>
+                </el-table-column>
+                <el-table-column label="志愿审核" width="280" align="center">
+                    <template slot-scope="scope">  
+                        <!-- <el-button type="text" icon="el-icon-check"  @click="handleEvaluate(scope.$index, scope.row)"></el-button> -->
+                        <el-button type="text" icon="el-icon-check" @click="handleEvaluate(scope.$index, scope.row)">通过</el-button>
+                        <el-button type="text" icon="el-icon-close" style="color:red" @click="handleRefuse(scope.$index, scope.row)">不通过</el-button>
                     </template>
                 </el-table-column>
                 </el-table>
@@ -173,6 +211,17 @@ export default {
 
             }else if(res.code == 2){
                 this.$message.error('评价失败！');
+                 
+            }
+        },
+        async handleRefuse(index, row){
+            const {data :res} = await this.$http.post("worker/needEvaluateRecords/refuse/", row);
+            if(res.code == 1){
+                this.tableData.splice(index,1);
+                this.$message.success('拒绝成功！');
+
+            }else if(res.code == 2){
+                this.$message.error('拒绝失败！');
                  
             }
         }

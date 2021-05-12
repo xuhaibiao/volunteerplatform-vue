@@ -56,7 +56,7 @@
                 >
                 <el-table-column prop="activity.id" label="活动编号" align="center"></el-table-column>
                 <el-table-column prop="activity.name" label="活动名" align="center"></el-table-column>
-                <el-table-column prop="activityStatus" label="活动状态" width="200px" align="center">
+                <el-table-column prop="activityStatus" label="活动状态"  align="center">
                     <template slot-scope="scope">
                         <el-button v-if="scope.row.activityStatus=='招募中'" type="text"  @click="handleReview(scope.row)">招募中,去审核报名</el-button>
                         <el-button v-else-if="scope.row.activityStatus=='招募结束,活动未开始'||scope.row.activityStatus=='活动进行中'" type="text" style="color: green" @click="handleVolunteerInfo(scope.row)">{{scope.row.activityStatus+",查看人员信息"}}</el-button>
@@ -65,16 +65,16 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="activity.recruitNumber" label="计划招募人数" align="center"  ></el-table-column>
-                <el-table-column prop="hasRecruitedNumber" label="已报名人数" align="center" ></el-table-column>
+                <!-- <el-table-column prop="hasRecruitedNumber" label="已报名人数" align="center" ></el-table-column> -->
                 <el-table-column prop="hasAgreeNumber" label="已招募人数" align="center" ></el-table-column>
-                <el-table-column prop="activityTimeRange" label="活动时间"  width="230px" align="center"></el-table-column>
+                <!-- <el-table-column prop="activityTimeRange" label="活动时间"  width="230px" align="center"></el-table-column> -->
                 <el-table-column label="操作"  align="center">
                     <template slot-scope="scope">
                         <el-button
                             type="text"
                             icon="el-icon-info"
                             style="color:green"
-                            @click="handleInfo(scope.row)"
+                            @click="handleInfo(scope.row.activity.id)"
                         >详情</el-button>
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.row)">修改</el-button>
                         
@@ -99,7 +99,7 @@
                 </div>
             </el-main>
             <!-- 详情弹出框 -->
-            <el-dialog title="活动详情" :visible.sync="infoVisible" width="30%">
+            <!-- <el-dialog title="活动详情" :visible.sync="infoVisible" width="30%">
                 <el-form ref="info" :model="info" label-width="100px">
                     <el-form-item label="活动名">
                         <el-lebal v-model="info.activity.name">{{info.activity.name}}</el-lebal>
@@ -135,7 +135,7 @@
                     </el-form-item>
                     
                 </el-form>
-            </el-dialog>
+            </el-dialog> -->
             
             <!-- 发布弹出框 -->
             <el-dialog title="发布活动" :visible.sync="addVisible" width="60%">
@@ -163,6 +163,7 @@
                     <el-form-item label="招募日期"  prop="recruitDateRange">
                         <el-date-picker
                             v-model="addActivityForm.recruitDateRange"
+                            value-format="yyyy-MM-dd HH:mm:ss"
                             type="datetimerange"
                             range-separator="至"
                             start-placeholder="开始日期"
@@ -172,6 +173,7 @@
                     <el-form-item label="活动日期"  prop="activityDateRange" >
                         <el-date-picker
                             v-model="addActivityForm.activityDateRange"
+                            value-format="yyyy-MM-dd HH:mm:ss"
                             type="datetimerange"
                             range-separator="至"
                             start-placeholder="开始日期"
@@ -188,6 +190,28 @@
                     <el-form-item label="活动内容"  prop="content" style="width: 70%">
                         <el-input type="textarea" rows="5" v-model="addActivityForm.content"></el-input>
                     </el-form-item>
+                    <el-form-item label="活动照片" prop="pic">
+                        <el-upload
+                            ref="upload"
+                            class="upload-demo"
+                            drag
+                            action="http://localhost:9000/worker/activity/add"
+                            multiple
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                            :on-success="uploadResult"
+                            :on-preview="handlePreview"
+                            :on-change="addFile"
+                            limit="1"
+                            list-type="picture"
+                            :before-remove="removeFile"
+                            :auto-upload="false"
+                            :data="addActivityForm"
+                            >
+                            <i class="el-icon-upload" ></i>
+                            <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
+                            <div class="el-upload__tip" slot="tip">只能上传图片</div>
+                        </el-upload>
+                    </el-form-item>
                     <el-form-item >
                         <el-button type="primary" @click="confirmAdd('addActivityForm')">发 布</el-button>
                         <el-button @click="cancelAdd">取 消</el-button>
@@ -198,7 +222,7 @@
 
             <!-- 修改弹出框 -->
             <el-dialog title="修改活动" :visible.sync="editVisible" width="40%" :show-close=false :close-on-click-modal='false'>
-                <el-form ref="editActivityForm" :model="editActivityForm" :rules="addActivityRules" label-width="110px">
+                <el-form ref="editActivityForm" :model="editActivityForm" :rules="addActivityRules" label-width="150px">
                     <el-form-item label="活动名" prop="name" style="width: 60%">
                         <el-input v-model="editActivityForm.name" type="integer"></el-input>
                     </el-form-item>
@@ -246,6 +270,35 @@
                     </el-form-item>
                     <el-form-item label="活动内容"  prop="content" style="width: 70%">
                         <el-input type="textarea" rows="5" v-model="editActivityForm.content"></el-input>
+                    </el-form-item>
+                    <el-form-item label="原活动照片"  prop="pic" style="width: 70%">
+                        <el-image    
+                        :src="editActivityForm.picUrl" 
+                        >
+                    </el-image>
+                    </el-form-item>
+                    
+                    <el-form-item label="新活动照片(可不传)" prop="pic">
+                        <el-upload
+                            ref="editUpload"
+                            class="upload-demo"
+                            action="http://localhost:9000/worker/activity/editWithPic"
+                            multiple
+                            accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+                            :on-success="editUploadResult"
+                            :on-preview="handlePreview"
+                            :on-change="editAddFile"
+                            limit="1"
+                            list-type="picture"
+                            :before-remove="editRemoveFile"
+                            :auto-upload="false"
+                            :data="editActivityForm"
+                            >
+                            <el-button size="small" type="primary">点击上传</el-button>（只能上传图片）
+                            <!-- <i class="el-icon-upload" ></i> -->
+                            <!-- <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div> -->
+                            <!-- <div class="el-upload__tip" slot="tip"></div> -->
+                        </el-upload>
                     </el-form-item>
                     <el-form-item >
                         <el-button type="primary" @click="confirmEdit('editActivityForm')">确 定</el-button>
@@ -321,6 +374,18 @@
                     </el-table-column>
                     <el-table-column prop="volunteerEvaluateScore" label="评分" width="100" align="center"></el-table-column>
                     <el-table-column prop="volunteerEvaluateContent" label="评价" align="center"></el-table-column>
+                    <el-table-column prop="picUrl" label="志愿照片" align="center">
+                        <template slot-scope="scope">
+                            <div class="demo-image__preview">
+                            <el-image 
+                                style="width: 100px; height: 100px"
+                                :src="scope.row.picUrl" 
+                                >
+                            </el-image>
+                            <!-- :preview-src-list="[scope.row.picUrl]" -->
+                            </div>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </el-dialog>
         </el-container>
@@ -398,7 +463,7 @@ export default {
             addActivityForm:{
                 name:'',
                 recruitRange:'全国',
-                worker:{},
+                workerId:'',
                 province: '省', 
                 city: '市',
                 area: '区' ,
@@ -414,15 +479,19 @@ export default {
                 id:'',
                 name:'',
                 recruitRange:'全国',
-                worker:{},
+                workerId:'',
                 province: '省', 
                 city: '市',
                 area: '区' ,
                 detailAddress:'',
                 workingHours:'',
                 recruitNumber:'',
-                recruitDateRange:[2],
-                activityDateRange:[2],
+                recruitDateRange:[],
+                activityDateRange:[],
+                // recruitBeginTime:'',
+                // recruitEndTime:'',
+                // activityBeginTime:'',
+                // activityEndTime:'',
                 content:''
 
             },
@@ -492,6 +561,10 @@ export default {
                 
             }],
 
+            file: null,
+            editFile: null,
+        
+
         
         };
     },
@@ -523,9 +596,18 @@ export default {
             global.collapse = !global.collapse;
         },
         
-        handleInfo(row) {
-            this.info = row;
-            this.infoVisible = true;
+        handleInfo(id) {
+            const { href } = this.$router.resolve({
+                name: "活动详情",
+                path: '/activityInfo',
+                query: {
+                    activityId: id,
+
+                }
+            });
+            window.open(href, '_blank');
+            // this.info = row;
+            // this.infoVisible = true;
     
         },
         
@@ -579,6 +661,7 @@ export default {
         },
 
         handleEdit(row){
+           
             this.editActivityForm.name = row.activity.name;
             this.editActivityForm.recruitRange = row.activity.recruitRange == 1 ? "全国":"本社区";
             this.editActivityForm.province = row.activity.province;
@@ -587,12 +670,18 @@ export default {
             this.editActivityForm.detailAddress = row.activity.detailAddress;
             this.editActivityForm.workingHours = row.activity.workingHours;
             this.editActivityForm.recruitNumber = row.activity.recruitNumber;
-            this.editActivityForm.recruitDateRange[0] = row.activity.recruitBeginTime;
-            this.editActivityForm.recruitDateRange[1] = row.activity.recruitEndTime;
-            this.editActivityForm.activityDateRange[0] = row.activity.activityBeginTime;
-            this.editActivityForm.activityDateRange[1] = row.activity.activityEndTime;
+
+            var activityDateRangeArr = new Array();
+            activityDateRangeArr.push(row.activity.activityBeginTime, row.activity.activityEndTime);
+            this.$set(this.editActivityForm,'activityDateRange',activityDateRangeArr);
+
+            var recruitDateRangeArr = new Array();
+            recruitDateRangeArr.push(row.activity.recruitBeginTime, row.activity.recruitEndTime);
+            this.$set(this.editActivityForm,'recruitDateRange',recruitDateRangeArr);
+
             this.editActivityForm.content = row.activity.content;
             this.editActivityForm.id = row.activity.id;
+            this.editActivityForm.picUrl = row.picUrl;
             this.editVisible = true;
         },
         confirmEdit(formName){
@@ -602,15 +691,39 @@ export default {
                     this.$message.error("请填写完整省市区！");
                     return false;
                 }else{
-                    this.editActivityForm.worker = this.user;
-                    const {data :res} = await this.$http.put("worker/activity/edit", this.editActivityForm);
-                    if (res.code == 1 ) {
-                        this.editVisible = false;
-                        this.$message.success("修改成功！");
-                        this.reload();
+                    
+                    this.editActivityForm.workerId = this.user.id;
+                    // this.editActivityForm.recruitBeginTime = this.editActivityForm.recruitDateRange[0];
+                    // this.editActivityForm.recruitEndTime = this.editActivityForm.recruitDateRange[1];
+                    // this.editActivityForm.activityBeginTime = this.editActivityForm.activityDateRange[0];
+                    // this.editActivityForm.activityEndTime = this.editActivityForm.activityDateRange[1];
+                    // console.log(this.editActivityForm.activityEndTime);
+                    // alert("edit");
+                
+                    if(this.editFile != null){
+                        this.$refs.editUpload.submit();
                     }else{
-                        this.$message.error("修改失败！！！");
+                        console.log(this.editActivityForm.activityDateRange);
+                        const {data :res} = await this.$http.post("worker/activity/editWithoutPic", this.editActivityForm);
+                        if (res.code == 1 ) {
+                            this.$message.success("修改成功！");
+                            this.addVisible = false;
+                            this.reload();   
+                
+                        }else{
+                            this.$message.error(res.msg);
+                        }
                     }
+                    
+                    
+                    // const {data :res} = await this.$http.put("worker/activity/edit", this.editActivityForm);
+                    // if (res.code == 1 ) {
+                    //     this.editVisible = false;
+                    //     this.$message.success("修改成功！");
+                    //     this.reload();
+                    // }else{
+                    //     this.$message.error("修改失败！！！");
+                    // }
                 }
             } else {
                 return false;
@@ -621,20 +734,20 @@ export default {
         },
         cancelEdit(){
             this.editVisible = false;
-            this.editActivityForm.name = '';
-            this.editActivityForm.recruitRange = "全国";
-            this.editActivityForm.province = '';
-            this.editActivityForm.city = '';
-            this.editActivityForm.area = '';
-            this.editActivityForm.detailAddress = '';
-            this.editActivityForm.workingHours = '';
-            this.editActivityForm.recruitNumber = '';
-            this.editActivityForm.recruitDateRange[0] = '';
-            this.editActivityForm.recruitDateRange[1] = '';
-            this.editActivityForm.activityDateRange[0] = '';
-            this.editActivityForm.activityDateRange[1] = '';
-            this.editActivityForm.content = '';
-            this.editActivityForm.id = '';
+            // this.editActivityForm.name = '';
+            // this.editActivityForm.recruitRange = "全国";
+            // this.editActivityForm.province = '';
+            // this.editActivityForm.city = '';
+            // this.editActivityForm.area = '';
+            // this.editActivityForm.detailAddress = '';
+            // this.editActivityForm.workingHours = '';
+            // this.editActivityForm.recruitNumber = '';
+            // this.editActivityForm.recruitDateRange[0] = '';
+            // this.editActivityForm.recruitDateRange[1] = '';
+            // this.editActivityForm.activityDateRange[0] = '';
+            // this.editActivityForm.activityDateRange[1] = '';
+            // this.editActivityForm.content = '';
+            // this.editActivityForm.id = '';
             
         },
         handleAdd(){
@@ -649,6 +762,7 @@ export default {
         cancelAdd(){
             this.addVisible = false;
         },
+        // 发布活动
         confirmAdd(formName){
             this.$refs[formName].validate(async (valid) => {
             if (valid) {
@@ -656,25 +770,69 @@ export default {
                     this.$message.error("请填写完整省市区！");
                     return false;
                 }else{
-                    this.addActivityForm.worker = this.user;
-                    const {data :res} = await this.$http.post("worker/activity/add", this.addActivityForm);
-                    if (res.code == 1 ) {
-                        this.addVisible = false;
-                        this.$message.success("发布成功！");
-                        this.reload();
-                        
+                    this.addActivityForm.workerId = this.user.id;
+                    if(this.file == null){
+                        this.$message.error("请上传志愿照片！");
+                        return;
                     }else{
-                        this.$message.error("发布失败！！！");
+                        this.$refs.upload.submit();
                     }
+                    // const {data :res} = await this.$http.post("worker/activity/add", this.addActivityForm);
+                    // if (res.code == 1 ) {
+                    //     this.addVisible = false;
+                    //     this.$message.success("发布成功！");
+                    //     this.reload();
+                        
+                    // }else{
+                    //     this.$message.error("发布失败！！！");
+                    // }
                 }
             } else {
                 return false;
             }
             });
-
-
             
         },
+        uploadResult(response, file, fileList){
+            if (response.code == 1 ) {
+                this.$message.success("发布成功！");
+                this.addVisible = false;
+                this.reload();
+                
+            }else{
+                this.$message.error(response.msg);
+            }
+
+
+        },
+        editUploadResult(response, file, fileList){
+            if (response.code == 1 ) {
+                // alert("successEdit");
+                this.$message.success("修改成功！");
+                this.editVisible = false;
+                this.reload();
+                
+                
+            }else{
+                this.editFile = null;
+                this.$message.error(response.msg);
+            }
+
+
+        },
+        addFile(file,fileList){
+            this.file = file;
+        },
+        removeFile(file,fileList){
+            this.file = null;
+        },
+        editAddFile(file,fileList){
+            this.editFile = file;
+        },
+        editRemoveFile(file,fileList){
+            this.editFile = null;
+        },
+
         //审核报名
         async handleReview(row){
             const {data:res} = await this.$http.get("worker/activity/reviewTable",{  

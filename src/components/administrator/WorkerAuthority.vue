@@ -64,39 +64,39 @@
                             <template slot-scope="props">
                                 <el-form label-position="left" inline class="demo-table-expand">
                                     <el-form-item label="性别" >
-                                        <span>{{ options[props.row.gender] }}</span>
+                                        <span>{{ options[props.row.worker.gender] }}</span>
                                     </el-form-item>
                                     <el-form-item label="密码">
-                                        <span>{{props.row.password}}</span>
+                                        <span>{{props.row.worker.password}}</span>
                                     </el-form-item>
                                     <el-form-item label="创建时间">
                                         <span>{{ props.row.createTime }}</span>
                                     </el-form-item>
                                     <el-form-item label="电话">
-                                        <span>{{ props.row.phone }}</span>
+                                        <span>{{ props.row.worker.phone }}</span>
                                     </el-form-item>
                                     <el-form-item label="地址">
-                                        <span>{{ props.row.address }}</span>
+                                        <span>{{ props.row.worker.address }}</span>
                                     </el-form-item>
                                     <el-form-item label="邮箱">
-                                        <span>{{ props.row.email }}</span>
+                                        <span>{{ props.row.worker.email }}</span>
                                     </el-form-item>
                                 
                                 </el-form>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="id" label="工作者编号" align="center"></el-table-column>
-                        <el-table-column prop="name" label="工作者姓名" align="center"></el-table-column>
-                        <el-table-column prop="idCard" label="工作者身份证" align="center"></el-table-column>
-                        <el-table-column prop="banStatus" label="封禁状态"  align="center">
+                        <el-table-column prop="worker.id" label="工作者编号" align="center"></el-table-column>
+                        <el-table-column prop="worker.name" label="工作者姓名" align="center"></el-table-column>
+                        <el-table-column prop="worker.idCard" label="工作者身份证" align="center"></el-table-column>
+                        <el-table-column prop="worker.banStatus" label="封禁状态"  align="center">
                             <template slot-scope="scope">
                                 <el-switch
-                                v-model="scope.row.banStatus"
+                                v-model="scope.row.worker.banStatus"
                                 :active-value= '1' 
                                 :inactive-value= '0'
                                 active-text="封禁"
                                 inactive-text="正常"
-                                @change="handleBanStatus(scope.row)"
+                                @change="handleBanStatus(scope.row.worker)"
                                 >
                                 </el-switch>
                             </template>
@@ -222,6 +222,7 @@ export default {
         this.collapse = global.collapse;
         this.user = JSON.parse(window.sessionStorage.getItem("user"));
         this.getWorker();
+        
        
     },
     methods:{
@@ -232,6 +233,7 @@ export default {
         async getWorker(){
             const {data:res} = await this.$http.get("administrator/workerAuthority");
             this.tableData = res.data;
+            this.$refs.configurationTable.$el.style.width = '99.5%';
             // if( res.status != 200) return this.$message.error("操作失败！！！");
             
         },

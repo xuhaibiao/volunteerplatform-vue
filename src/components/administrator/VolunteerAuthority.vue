@@ -64,35 +64,35 @@
                             <template slot-scope="props">
                                 <el-form label-position="left" inline class="demo-table-expand">
                                     <el-form-item label="性别" >
-                                        <span>{{ options[props.row.gender] }}</span>
+                                        <span>{{ options[props.row.volunteer.gender] }}</span>
                                     </el-form-item>
                                     <el-form-item label="密码">
-                                        <span>{{props.row.password}}</span>
+                                        <span>{{props.row.volunteer.password}}</span>
                                     </el-form-item>
                                     <el-form-item label="创建时间">
                                         <span>{{ props.row.createTime }}</span>
                                     </el-form-item>
                                     <el-form-item label="电话">
-                                        <span>{{ props.row.phone }}</span>
+                                        <span>{{ props.row.volunteer.phone }}</span>
                                     </el-form-item>
                                     <el-form-item label="地址">
-                                        <span>{{ props.row.address }}</span>
+                                        <span>{{ props.row.volunteer.address }}</span>
                                     </el-form-item>
                                 </el-form>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="id" label="志愿者编号" align="center"></el-table-column>
-                        <el-table-column prop="name" label="志愿者姓名" align="center"></el-table-column>
-                        <el-table-column prop="idCard" label="志愿者身份证" align="center"></el-table-column>
-                        <el-table-column prop="banStatus" label="封禁状态"  align="center">
+                        <el-table-column prop="volunteer.id" label="志愿者编号" align="center"></el-table-column>
+                        <el-table-column prop="volunteer.name" label="志愿者姓名" align="center"></el-table-column>
+                        <el-table-column prop="volunteer.idCard" label="志愿者身份证" align="center"></el-table-column>
+                        <el-table-column prop="volunteer.banStatus" label="封禁状态"  align="center">
                             <template slot-scope="scope">
                                 <el-switch
-                                v-model="scope.row.banStatus"
+                                v-model="scope.row.volunteer.banStatus"
                                 :active-value= '1' 
                                 :inactive-value= '0'
                                 active-text="封禁"
                                 inactive-text="正常"
-                                @change="handleBanStatus(scope.row)"
+                                @change="handleBanStatus(scope.row.volunteer)"
                                 >
                                 </el-switch>
                             </template>
@@ -218,6 +218,7 @@ export default {
         this.collapse = global.collapse;
         this.user = JSON.parse(window.sessionStorage.getItem("user"));
         this.getVolunteer();
+        
        
     },
     methods:{
@@ -228,6 +229,7 @@ export default {
         async getVolunteer(){
             const {data:res} = await this.$http.get("administrator/volunteerAuthority");
             this.tableData = res.data;
+            this.$refs.configurationTable.$el.style.width = '99.5%';
             // if( res.status != 200) return this.$message.error("操作失败！！！");
             
         },

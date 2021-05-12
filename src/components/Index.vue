@@ -10,8 +10,14 @@
                     <!-- <el-menu-item index="2">社区</el-menu-item> -->
                 </el-menu>  
            </div>
-        
-            <el-button type="text"  @click="logout">去登录/注册</el-button>  
+
+            <div>
+                <el-button type="text"  @click="goLogin">去登录</el-button>
+                
+                <el-button type="text">/</el-button>
+                <el-button type="text"  @click="goRegister">注册</el-button>
+            </div>
+            
         </el-header>
 <!-- <div class="line"></div> -->
             <el-main>   
@@ -21,8 +27,9 @@
                             <el-form-item label="项目区域" prop="place">
                                 <el-row>
                                     <el-col :span="10" >
-                                        <v-distpicker :province="screenForm.province" 
+                                        <v-distpicker :province="screenForm.province" :city="screenForm.city"
                                         @province="selectProvince" 
+                                        @city="selectCity"
                                         hide-area
                                         >
                                         </v-distpicker>
@@ -49,26 +56,35 @@
                     
 
                     <div class="form-box">
-                        <el-col :span="7"  v-for="l in list" v-bind:key="l.id">
-                            <el-card shadow="hover" class="card" :body-style="{ padding: '0px' }" v-cloak @click.native="info(l.id)" >
-                                <img src="https://picsum.photos/id/1/300/200" class="image">
+                        <el-col :span="7"  v-for="a in activities" v-bind:key="a.id">
+                            <el-card shadow="hover" class="card" :body-style="{ padding: '10px' }" v-cloak @click.native="info(a.activity.id)" >
+                                <el-image    
+                                    :src="a.picUrl" 
+                                    >
+                                </el-image>
+                                <!-- style="width: 390px; height: 100%" -->
+                                <!-- <img src= a.picUrl class="image"> -->
                                 <div style="padding: 14px;">
-                                <el-lebal v-model="l.title">{{l.title}}</el-lebal>
+                                    <el-lebal>{{a.activity.name}}</el-lebal>
+
                                     <div class="bottom clearfix">
-                                        <time class="time">{{"截止时间："+ currentDate }}</time>
-                                        
+                                        <time class="time">{{"报名截止时间："+ a.activity.recruitEndTime }}</time>
                                     </div>
                                     <div class="bottom clearfix">
-                                        <el-lebal v-model="l.value">{{l.value}}</el-lebal>
+                                        <el-lebal>{{"地址："+ a.activity.province +" "+ a.activity.city}}</el-lebal>
+                                    </div>
+                                    <div class="bottom clearfix">
+                                        <el-lebal>{{"计划招募："+ a.activity.recruitNumber +"人"}}</el-lebal>
+                                    </div>
+                                    <div class="bottom clearfix">
+                                        <el-lebal>{{"已报名："+ a.hasRecruitedNumber +"人"}}</el-lebal>
+                                    </div>
+                                    <div class="bottom clearfix">
+                                        <el-lebal>活动状态：</el-lebal>
+                                        <el-lebal v-if="a.activityStatus==='招募中'" style="color: green">招募中</el-lebal>
+                                        <el-lebal v-else style="color: red">{{a.activityStatus}}</el-lebal>
                                     </div>
                                     
-                                    
-                                        
-                                   
-                                   
-                                        
-                                    
-                                
                                 </div>
                             </el-card>
                         </el-col>
@@ -77,14 +93,6 @@
                     
                      
                 <!-- </el-row> -->
-
-               
-                    
-                    
-                    
-              
-                    
-               
 
 
                 
@@ -103,54 +111,43 @@ export default {
     data(){
         return{
             collapse: '',
+            
+            // screenForm: { 
+            //     province: '省', 
+            //     city: '市',
+            //     area: '区' ,
+            //     activityName:''
+            
+            // },
             screenForm: { 
-                province: '省', 
+                province: '', 
+                city: '',
+                area: '区' ,
                 activityName:''
             
             },
-            currentDate: new Date(),
-            list:[
+            // currentDate: new Date(),
+            activities:[
                 {
-                    id:1,
-                    title:'aaa',
-                    value:1
-                },
-                {
-                    id:2,
-                    title:'aaa',
-                    value:2
-                },
-                {
-                    id:3,
-                    title:'aaa',
-                    value:3
-                },
-
-                {
-                    id:4,
-                    title:'aaa',
-                    value:4
-                },
-                {
-                    id:5,
-                    title:'aaa',
-                    value:5
-                },
-                
-               
+                    activity: {}
+                }
             ],
+            
             
         };
     },
     // 类似onload
     created() {
-        
+        this.getActivity();
         
     },
     methods:{
-        logout(){
-            window.sessionStorage.clear();
+        goLogin(){
             this.$router.push("/login");
+        },
+
+        goRegister(){
+            this.$router.push("/register");
         },
         
         info(id){
@@ -158,11 +155,45 @@ export default {
                 name: "活动详情",
                 path: '/activityInfo',
                 query: {
-                    activityId: id 
+                    activityId: id,
+
                 }
             });
             window.open(href, '_blank');
-        }
+        },
+
+        async getActivity(){
+            const {data:res} = await this.$http.get("volunteer/activity");
+            this.activities = res.data;
+        },
+
+        
+        selectProvince(value) {
+            this.screenForm.province = value.value
+    
+        },
+        selectCity(value) {
+            this.screenForm.city = value.value
+           
+        },
+       
+        async handleSearch(){
+            const {data:res} = await this.$http.get("volunteer/activity/search",{  
+                params: {  
+                    "province": this.screenForm.province,
+                    "city": this.screenForm.city,
+                    "area": this.screenForm.area,
+                    "activityName": this.screenForm.activityName
+                }  
+            });
+            this.activities = res.data;
+
+            
+        },
+
+
+
+        
 
         
     }

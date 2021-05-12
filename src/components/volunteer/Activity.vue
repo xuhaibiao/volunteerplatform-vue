@@ -70,7 +70,7 @@
                     >
                         <el-table-column prop="activity.id" label="活动编号"  align="center"></el-table-column>
                         <el-table-column prop="activity.name" label="活动名" align="center"></el-table-column>
-                        <el-table-column prop="communityName" label="活动社区" align="center"></el-table-column>
+                        <el-table-column prop="communityName" label="发起社区" align="center"></el-table-column>
                         <el-table-column prop="activityStatus" label="活动状态"  style="color: green" align="center">
                             <template slot-scope="scope">
                                     <span v-if="scope.row.activityStatus==='招募中'" style="color: green">招募中</span>
@@ -83,16 +83,16 @@
                                     {{options[scope.row.activity.recruitRange]}}
                             </template>
                         </el-table-column>
-                        <el-table-column prop="activity.recruitNumber" label="计划招募人数" align="center"  ></el-table-column>
+                        <!-- <el-table-column prop="activity.recruitNumber" label="计划招募人数" align="center"  ></el-table-column>
                         <el-table-column prop="hasRecruitedNumber" label="已报名人数" align="center"  ></el-table-column>
                         <el-table-column prop="hasAgreeNumber" label="已招募人数" align="center"  ></el-table-column>
-                        <el-table-column prop="activityTimeRange" label="活动时间" align="center"></el-table-column>
+                        <el-table-column prop="activityTimeRange" label="活动时间" align="center"></el-table-column> -->
                         <el-table-column label="操作"  align="center">
                             <template slot-scope="scope">
                                 <el-button
                                     type="text"
                                     icon="el-icon-info"
-                                    @click="handleInfo(scope.row)"
+                                    @click="handleInfo(scope.row.activity.id)"
                                     style="color:green"
                                 >详情</el-button>
                                 <el-button
@@ -130,7 +130,7 @@
                 </div>
             </el-main>
             <!-- 详情弹出框 -->
-            <el-dialog title="活动详情" :visible.sync="infoVisible" >
+            <!-- <el-dialog title="活动详情" :visible.sync="infoVisible" >
                 <el-form ref="info" :model="info" label-width="100px">
                     <el-form-item label="活动名">
                         <el-lebal v-model="info.activity.name">{{info.activity.name}}</el-lebal>
@@ -166,7 +166,7 @@
                     </el-form-item>
                     
                 </el-form>
-            </el-dialog>
+            </el-dialog> -->
             
             <!-- 报名弹出框 -->
             <el-dialog title="信息确认" :visible.sync="signUpInfoVisible" width="30%">
@@ -228,9 +228,9 @@ export default {
         return{
             user:{},
             screenForm: { 
-                province: '省', 
-                city: '市',
-                area: '区' ,
+                province: '', 
+                city: '',
+                area: '' ,
                 activityName:''
             
             },
@@ -302,10 +302,10 @@ export default {
         this.user = JSON.parse(window.sessionStorage.getItem("user"));
         this.getUserInfo();
         this.getActivity();
-        this.screenForm.province="省";
-        this.screenForm.city="市";
-        this.screenForm.area="区";
-        this.screenForm.activityName = "";
+        // this.screenForm.province="省";
+        // this.screenForm.city="市";
+        // this.screenForm.area="区";
+      
         
     },
     methods:{
@@ -339,9 +339,18 @@ export default {
             global.collapse = !global.collapse;
         },
         
-        handleInfo(row) {
-            this.info = row;
-            this.infoVisible = true;
+        handleInfo(id) {
+            const { href } = this.$router.resolve({
+                name: "活动详情",
+                path: '/activityInfo',
+                query: {
+                    activityId: id,
+
+                }
+            });
+            window.open(href, '_blank');
+            // this.info = row;
+            // this.infoVisible = true;
     
         },
         handleSignUp(row){
@@ -390,6 +399,9 @@ export default {
             
         },
         async handleSearch(){
+            if(this.screenForm.province == '') this.screenForm.province = "省";
+            if(this.screenForm.city == '') this.screenForm.city = "市";
+            if(this.screenForm.area == '') this.screenForm.area = "区";
             const {data:res} = await this.$http.get("volunteer/activity/search",{  
                 params: {  
                     "province": this.screenForm.province,

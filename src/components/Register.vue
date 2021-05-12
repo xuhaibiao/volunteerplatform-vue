@@ -132,7 +132,7 @@
                                 drag
                                 action="http://localhost:9000/signUp"
                                 multiple
-                                accept=".pdf"
+                                accept=".pdf,.PDF"
                                 :on-success="uploadResult"
                                 :on-preview="handlePreview"
                                 :on-change="addFile"
