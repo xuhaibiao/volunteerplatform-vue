@@ -26,7 +26,7 @@
                         <el-form ref="screenForm" :model="screenForm" label-width="80px">
                             <el-form-item label="项目区域" prop="place">
                                 <el-row>
-                                    <el-col :span="10" >
+                                    <el-col :span="12" >
                                         <v-distpicker :province="screenForm.province" :city="screenForm.city"
                                         @province="selectProvince" 
                                         @city="selectCity"
@@ -56,7 +56,7 @@
                     
 
                     <div class="form-box">
-                        <el-col :span="7"  v-for="a in activities" v-bind:key="a.id">
+                        <el-col :span="8"  v-for="a in activities" v-bind:key="a.id">
                             <el-card shadow="hover" class="card" :body-style="{ padding: '10px' }" v-cloak @click.native="info(a.activity.id)" >
                                 <el-image    
                                     :src="a.picUrl" 
@@ -68,7 +68,7 @@
                                     <el-lebal>{{a.activity.name}}</el-lebal>
 
                                     <div class="bottom clearfix">
-                                        <time class="time">{{"报名截止时间："+ a.activity.recruitEndTime }}</time>
+                                        <time class="time">{{"报名时间："+ a.recruitTimeRange }}</time>
                                     </div>
                                     <div class="bottom clearfix">
                                         <el-lebal>{{"地址："+ a.activity.province +" "+ a.activity.city}}</el-lebal>
@@ -142,8 +142,29 @@ export default {
         
     },
     methods:{
+        reset(){
+            this.screenForm.province = '';
+            this.screenForm.city = '';
+            this.screenForm.activityName = '';
+            this.getActivity();
+        },
         goLogin(){
             this.$router.push("/login");
+        },
+
+        async handleSearch(){
+            if(this.screenForm.province === ''||this.screenForm.province == null) this.screenForm.province = "省";
+            if(this.screenForm.city === ''||this.screenForm.city == null) this.screenForm.city = "市";
+            if(this.screenForm.area === ''||this.screenForm.area == null) this.screenForm.area = "区";
+            const {data:res} = await this.$http.get("volunteer/activity/search",{  
+                params: {  
+                    "province": this.screenForm.province,
+                    "city": this.screenForm.city,
+                    "area": this.screenForm.area,
+                    "activityName": this.screenForm.activityName
+                }  
+            });
+            this.activities = res.data;
         },
 
         goRegister(){
@@ -177,19 +198,7 @@ export default {
            
         },
        
-        async handleSearch(){
-            const {data:res} = await this.$http.get("volunteer/activity/search",{  
-                params: {  
-                    "province": this.screenForm.province,
-                    "city": this.screenForm.city,
-                    "area": this.screenForm.area,
-                    "activityName": this.screenForm.activityName
-                }  
-            });
-            this.activities = res.data;
-
-            
-        },
+    
 
 
 

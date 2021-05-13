@@ -130,7 +130,7 @@
                                 ref="upload"
                                 class="upload-demo"
                                 drag
-                                action="http://localhost:9000/signUp"
+                                action="http://localhost:9000/signUpWithFile"
                                 multiple
                                 accept=".pdf,.PDF"
                                 :on-success="uploadResult"
@@ -293,7 +293,7 @@ export default {
                 }else{
                     if(this.registerForm.type == 0){
                         // 志愿者
-                        const {data :res} = await this.$http.post("signUp", this.registerForm);
+                        const {data :res} = await this.$http.post("signUpWithoutFile", this.registerForm);
                         if(res.code==2){
                             console.log(res.msg);
                             this.$message.error(res.msg);
@@ -306,7 +306,7 @@ export default {
                     }else if(this.registerForm.type == 1){
                         // 工作者（加入社区）
                         if(this.communitiesContainStr(this.communities, this.registerForm.joinCommunityInfo)){
-                            const {data :res} = await this.$http.post("signUp", this.registerForm);
+                            const {data :res} = await this.$http.post("signUpWithoutFile", this.registerForm);
                             if(res.code==2){
                                 console.log(res.msg);
                                 this.$message.error(res.msg);
@@ -351,7 +351,7 @@ export default {
             return false;
         },
         uploadResult(response, file, fileList){
-            console.log(response);
+            
             if(response.code == 2){
                 this.$message.error(response.msg);
             }else{

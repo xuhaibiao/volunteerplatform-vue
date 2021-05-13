@@ -221,10 +221,10 @@
             </el-dialog>
 
             <!-- 修改弹出框 -->
-            <el-dialog title="修改活动" :visible.sync="editVisible" width="40%" :show-close=false :close-on-click-modal='false'>
+            <el-dialog title="修改活动" :visible.sync="editVisible"  :show-close=false :close-on-click-modal='false'>
                 <el-form ref="editActivityForm" :model="editActivityForm" :rules="addActivityRules" label-width="150px">
-                    <el-form-item label="活动名" prop="name" style="width: 60%">
-                        <el-input v-model="editActivityForm.name" type="integer"></el-input>
+                    <el-form-item label="活动名" prop="name" style="width: 80%">
+                        <el-input v-model="editActivityForm.name" ></el-input>
                     </el-form-item>
                     <el-form-item label="活动省市区" prop="address">
                         <v-distpicker :province="editActivityForm.province" :city="editActivityForm.city" :area="editActivityForm.area" 
@@ -233,13 +233,13 @@
                                     @area="selectArea">
                         </v-distpicker>
                     </el-form-item>
-                    <el-form-item label="详细地址" prop="detailAddress"  >
+                    <el-form-item label="详细地址" prop="detailAddress"  style="width: 80%">
                         <el-input v-model="editActivityForm.detailAddress"></el-input>
                     </el-form-item>
-                    <el-form-item label="活动工时" prop="workingHours"  >
+                    <el-form-item label="活动工时" prop="workingHours"  style="width: 80%">
                         <el-input v-model.number="editActivityForm.workingHours"></el-input>
                     </el-form-item>
-                    <el-form-item label="招募人数" prop="recruitNumber"  >
+                    <el-form-item label="招募人数" prop="recruitNumber" style="width: 80%" >
                         <el-input v-model.number="editActivityForm.recruitNumber"></el-input>
                     </el-form-item>
                 
@@ -268,10 +268,10 @@
                             <el-radio label="本社区"></el-radio>
                         </el-radio-group>
                     </el-form-item>
-                    <el-form-item label="活动内容"  prop="content" style="width: 70%">
+                    <el-form-item label="活动内容"  prop="content" style="width: 80%">
                         <el-input type="textarea" rows="5" v-model="editActivityForm.content"></el-input>
                     </el-form-item>
-                    <el-form-item label="原活动照片"  prop="pic" style="width: 70%">
+                    <el-form-item label="原活动照片"  prop="pic" style="width: 80%">
                         <el-image    
                         :src="editActivityForm.picUrl" 
                         >
@@ -464,9 +464,9 @@ export default {
                 name:'',
                 recruitRange:'全国',
                 workerId:'',
-                province: '省', 
-                city: '市',
-                area: '区' ,
+                province: '', 
+                city: '',
+                area: '' ,
                 detailAddress:'',
                 workingHours:'',
                 recruitNumber:'',
@@ -766,7 +766,9 @@ export default {
         confirmAdd(formName){
             this.$refs[formName].validate(async (valid) => {
             if (valid) {
-                if(this.addActivityForm.province=='省'||this.addActivityForm.city=='市'||this.addActivityForm.area=='区'){
+                if(this.addActivityForm.province =='省'||this.addActivityForm.province ==''
+                ||this.addActivityForm.city=='市'||this.addActivityForm.city==''
+                ||this.addActivityForm.area=='区'||this.addActivityForm.area==''){
                     this.$message.error("请填写完整省市区！");
                     return false;
                 }else{

@@ -43,7 +43,7 @@ export default {
     data(){
         return{
             loginForm:{
-                idCard:"111111111111111111",
+                idCard:"330621199906228888",
                 password:"123456",
                 type:"1"
             },
