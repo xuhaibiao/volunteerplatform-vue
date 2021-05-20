@@ -20,8 +20,11 @@
             
         </el-header>
 <!-- <div class="line"></div> -->
-            <el-main>   
-               <el-row>
+            <el-main> 
+                <el-row>
+               
+                </el-row>
+                <el-row>
                     <div class="form-box">
                         <el-form ref="screenForm" :model="screenForm" label-width="80px">
                             <el-form-item label="项目区域" prop="place">
@@ -132,14 +135,14 @@ export default {
                     activity: {}
                 }
             ],
-            
+
             
         };
     },
     // 类似onload
     created() {
         this.getActivity();
-        
+
     },
     methods:{
         reset(){
@@ -147,6 +150,7 @@ export default {
             this.screenForm.city = '';
             this.screenForm.activityName = '';
             this.getActivity();
+            
         },
         goLogin(){
             this.$router.push("/login");
@@ -187,7 +191,7 @@ export default {
             const {data:res} = await this.$http.get("volunteer/activity");
             this.activities = res.data;
         },
-
+      
         
         selectProvince(value) {
             this.screenForm.province = value.value
@@ -296,6 +300,8 @@ export default {
   .clearfix:after {
       clear: both
   }
+
+
 </style>
 
 

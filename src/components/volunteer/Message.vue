@@ -103,12 +103,7 @@ export default {
                     title: '    消息',
                     icon: 'iconfont icon-xiaoxi'
                 },
-                {
-                    // icon: 'el-icon-s-home',
-                    index: 'setting',
-                    title: '    设置',
-                    icon: 'iconfont icon-shezhi'
-                }, 
+             
             
             ],
             message: 'first',

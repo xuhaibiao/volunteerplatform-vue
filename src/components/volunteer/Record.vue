@@ -37,23 +37,33 @@
                 >
                 <el-table-column type="expand">
                     <template slot-scope="props">
-                        <el-form label-position="left" inline class="demo-table-expand">
-                            <el-form-item label="记录编号" >
+                        <el-form label-position="left" inline class="demo-table-expand" label-width="20%">
+                            <el-form-item label="记录编号：" >
                                 <span>{{ props.row.volunteerRecord.id }}</span>
                             </el-form-item>
-                            <el-form-item label="记录状态">
+                            <el-form-item label="记录状态：">
                                 <span>{{statusAndButtonText[props.row.volunteerRecord.status].statusText}}</span>
                             </el-form-item>
-                            <el-form-item label="记录生成时间">
+                            <el-form-item label="记录生成时间：">
                                 <span>{{ props.row.recordCreateTime }}</span>
                             </el-form-item>
-                            <el-form-item label="我的评价">
+                            <el-form-item label="我的志愿描述与感受：">
                                 <span>{{ props.row.volunteerRecord.volunteerEvaluateContent }}</span>
                             </el-form-item>
-                            <el-form-item label="我的评分">
-                                <span>{{ props.row.volunteerRecord.volunteerEvaluateScore }}</span>
+                             <el-form-item label="我的志愿照片：">
+                                <div class="demo-image__preview" v-if="props.row.activityResponse.picUrl !=null ">
+                                    <el-image 
+                                        style="width: 100px; height: 100px"
+                                        :src="props.row.activityResponse.picUrl" 
+                                        :preview-src-list="[props.row.activityResponse.picUrl]">
+                                    </el-image>
+                                </div>
+                                
                             </el-form-item>
-                            <el-form-item label="工作人员评分">
+                            <el-form-item label="我的评分：">
+                                <span>{{ props.row.volunteerRecord.volunteerEvaluateScore }}</span>
+                            </el-form-item>                      
+                            <el-form-item label="工作人员评分：">
                                 <span>{{ props.row.volunteerRecord.workerEvaluate }}</span>
                             </el-form-item>
                             <el-form-item>
@@ -156,12 +166,12 @@
                         style="width: 360px"
                         :rows="5"
                         v-model="evaluate.content"
-                        maxlength="50"
+                        maxlength="500"
                         show-word-limit>
                         </el-input>
                      </el-form-item>
 
-                    <el-form-item label="志愿照片证明" prop="pic">
+                    <el-form-item label="志愿照片证明（必须上传）" prop="pic">
                         <el-upload
                                 ref="upload"
                                 class="upload-demo"
@@ -242,12 +252,7 @@ export default {
                     title: '    消息',
                     icon: 'iconfont icon-xiaoxi'
                 },
-                {
-                    // icon: 'el-icon-s-home',
-                    index: 'setting',
-                    title: '    设置',
-                    icon: 'iconfont icon-shezhi'
-                }, 
+               
             
             ],
             tableData:[{

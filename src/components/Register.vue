@@ -170,22 +170,22 @@ export default {
     data(){
         return{
             registerForm:{
-                idCard:'333333333333333333',
-                username:'徐嗨嗨',
-                password:'123456',
-                type: '2',
+                idCard:'',
+                username:'',
+                password:'',
+                type: '1',
                 gender: 1,
-                phone:'33333333333',
-                detailAddress:'测试村',
-                province: '浙江省', 
-                city: '绍兴市',
-                area: '柯桥区' ,
+                phone:'',
+                detailAddress:'',
+                province: '', 
+                city: '',
+                area: '' ,
                 joinCommunityInfo: '',
-                communityName:'1',
+                communityName:'',
                 communityProvince:'',
                 communityCity:'',
                 communityArea:'',
-                communityDetailAddress:'1',
+                communityDetailAddress:'',
                 
                 // community:{
                 //     name:'1',

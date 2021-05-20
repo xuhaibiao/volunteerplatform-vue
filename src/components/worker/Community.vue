@@ -142,7 +142,7 @@
                     <el-table-column prop="volunteer.volunteerHours" label="志愿工时" align="center"  ></el-table-column>
                     <el-table-column prop="volunteer.volunteerScore" label="志愿总分" align="center" ></el-table-column>
                     <el-table-column prop="volunteer.volunteerNumber" label="志愿次数" align="center"  ></el-table-column>
-                    <el-table-column prop="message.createTime" label="申请时间" align="center"  ></el-table-column>
+                    <el-table-column prop="createTime" label="申请时间" align="center"  ></el-table-column>
                     <el-table-column label="操作" align="center">
                         <template slot-scope="scope">
                             <!-- <el-button
@@ -168,7 +168,7 @@
                     <el-table-column prop="worker.id" label="工作者编号" align="center"></el-table-column>
                     <el-table-column prop="worker.name" label="工作者姓名" align="center"  ></el-table-column>
                     <el-table-column prop="worker.idCard" label="工作者身份证号" align="center"></el-table-column>
-                    <el-table-column prop="message.createTime" label="申请时间" align="center"  ></el-table-column>
+                    <el-table-column prop="createTime" label="申请时间" align="center"  ></el-table-column>
                     <el-table-column label="操作" align="center">
                         <template slot-scope="scope">
                             <!-- <el-button
@@ -251,13 +251,7 @@ export default {
                     title: '    消息',
                     icon: 'iconfont icon-xiaoxi'
                 },
-                {
-                    // icon: 'el-icon-s-home',
-                    index: 'statistics',
-                    title: '    志愿统计',
-                    icon: 'iconfont icon-shezhi'
-                }, 
-                
+               
             
             ],
             tableData:[{ 

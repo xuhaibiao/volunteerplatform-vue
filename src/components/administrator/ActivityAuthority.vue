@@ -332,7 +332,7 @@ export default {
         cancelChange(){
             // 分页状态下的idx计算
             var idx = (this.currentPage-1)*this.pagesize+this.changeStatusForm.index;
-            this.tableData[idx].hasDeleted = this.tableData[idx].hasDeleted ^ 1;
+            this.tableData[idx].activity.hasDeleted = this.tableData[idx].activity.hasDeleted ^ 1;
             this.reasonVisible = false;
         },
         

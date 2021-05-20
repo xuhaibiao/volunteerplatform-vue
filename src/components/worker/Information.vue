@@ -150,12 +150,6 @@ export default {
                     title: '    消息',
                     icon: 'iconfont icon-xiaoxi'
                 },
-                {
-                    // icon: 'el-icon-s-home',
-                    index: 'statistics',
-                    title: '    志愿统计',
-                    icon: 'iconfont icon-shezhi'
-                },
             
             ],
             options: [

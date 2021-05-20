@@ -11,7 +11,7 @@ import NeedEvaluateRecords from '../components/worker/NeedEvaluateRecords'
 import WorkerInformation from '../components/worker/Information.vue'
 import WorkerCommunity from '../components/worker/Community.vue'
 import WorkerMessage from '../components/worker/Message.vue'
-import Statistics from '../components/worker/Statistics.vue'
+// import Statistics from '../components/worker/Statistics.vue'
 import AdministratorHome from '../components/administrator/Home.vue'
 import VolunteerAuthority from '../components/administrator/VolunteerAuthority.vue'
 import WorkerAuthority from '../components/administrator/WorkerAuthority.vue'
@@ -33,7 +33,7 @@ const routes = [
     path:"",
     // redirect:"/volunteer/activity"
     // redirect:"/login"
-    redirect:"/index"
+    redirect:"/volunteerPlatform/index"
   },
   {
     path:"/login",
@@ -80,10 +80,10 @@ const routes = [
     path:"/worker/message",
     component:WorkerMessage
   },
-  {
-    path:"/worker/statistics",
-    component:Statistics
-  },
+  // {
+  //   path:"/worker/statistics",
+  //   component:Statistics
+  // },
 
   {
     path:"/administrator/home",
@@ -113,7 +113,7 @@ const routes = [
   
 
   {
-    path:"/index",
+    path:"/volunteerPlatform/index",
     component:Index
   },
   {
@@ -129,7 +129,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode:'history',
+  // mode:'history',
   routes
 })
 

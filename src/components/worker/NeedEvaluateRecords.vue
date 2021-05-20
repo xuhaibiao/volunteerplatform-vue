@@ -35,22 +35,22 @@
                 <el-table-column type="expand">
                     <template slot-scope="props">
                         <el-form label-position="left" inline class="demo-table-expand" label-width="180px">
-                            <el-form-item label="活动编号" >
+                            <el-form-item label="活动编号：" >
                                 <span>{{ props.row.activityId }}</span>
                             </el-form-item>
-                            <el-form-item label="活动名">
+                            <el-form-item label="活动名：">
                                 <span>{{ props.row.activityName}}</span>
                             </el-form-item>
-                            <el-form-item label="志愿者姓名">
+                            <el-form-item label="志愿者姓名：">
                                 <span>{{ props.row.volunteerName }}</span>
                             </el-form-item>
-                            <el-form-item label="志愿者身份证">
+                            <el-form-item label="志愿者身份证：">
                                 <span>{{ props.row.volunteerIdCard }}</span>
                             </el-form-item>
-                            <el-form-item label="志愿者给出评分">
+                            <el-form-item label="志愿者给出评分：">
                                 <span>{{ props.row.volunteerEvaluateScore }}</span>
                             </el-form-item>
-                            <el-form-item label="志愿者志愿描述及评价">
+                            <el-form-item label="志愿者志愿描述及评价：">
                                 <span>{{ props.row.volunteerEvaluatContent }}</span>
                             </el-form-item>
                         </el-form>
@@ -146,12 +146,6 @@ export default {
                     index: 'message',
                     title: '    消息',
                     icon: 'iconfont icon-xiaoxi'
-                },
-                {
-                    // icon: 'el-icon-s-home',
-                    index: 'statistics',
-                    title: '    志愿统计',
-                    icon: 'iconfont icon-shezhi'
                 },
             
             ],

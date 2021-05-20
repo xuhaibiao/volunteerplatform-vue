@@ -283,12 +283,7 @@ export default {
                     title: '    消息',
                     icon: 'iconfont icon-xiaoxi'
                 },
-                {
-                    // icon: 'el-icon-s-home',
-                    index: 'setting',
-                    title: '    设置',
-                    icon: 'iconfont icon-shezhi'
-                }, 
+            
             
             ],
             tableData:[{ },
@@ -399,9 +394,9 @@ export default {
             
         },
         async handleSearch(){
-            if(this.screenForm.province == '') this.screenForm.province = "省";
-            if(this.screenForm.city == '') this.screenForm.city = "市";
-            if(this.screenForm.area == '') this.screenForm.area = "区";
+            if(this.screenForm.province == ''||this.screenForm.province == null) this.screenForm.province = "省";
+            if(this.screenForm.city == ''||this.screenForm.city == null) this.screenForm.city = "市";
+            if(this.screenForm.area == ''||this.screenForm.area == null) this.screenForm.area = "区";
             const {data:res} = await this.$http.get("volunteer/activity/search",{  
                 params: {  
                     "province": this.screenForm.province,

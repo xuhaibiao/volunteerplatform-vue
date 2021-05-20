@@ -138,8 +138,8 @@
             </el-dialog> -->
             
             <!-- 发布弹出框 -->
-            <el-dialog title="发布活动" :visible.sync="addVisible" width="60%">
-                <el-form ref="addActivityForm" :model="addActivityForm" :rules="addActivityRules" label-width="110px">
+            <el-dialog title="发布活动" :visible.sync="addVisible">
+                <el-form ref="addActivityForm" :model="addActivityForm" :rules="addActivityRules" label-width="150px">
                     <el-form-item label="活动名" prop="name" style="width: 60%">
                         <el-input v-model="addActivityForm.name" type="integer"></el-input>
                     </el-form-item>
@@ -154,10 +154,10 @@
                         <el-input v-model="addActivityForm.detailAddress"></el-input>
                     </el-form-item>
                     <el-form-item label="活动工时" prop="workingHours"  style="width: 30%">
-                        <el-input v-model.number="addActivityForm.workingHours"></el-input>
+                        <el-input v-model.number="addActivityForm.workingHours" @keyup.native="number1"></el-input>
                     </el-form-item>
                     <el-form-item label="招募人数" prop="recruitNumber"  style="width: 30%">
-                        <el-input v-model.number="addActivityForm.recruitNumber"></el-input>
+                        <el-input v-model.number="addActivityForm.recruitNumber" @keyup.native="number2"></el-input>
                     </el-form-item>
                 
                     <el-form-item label="招募日期"  prop="recruitDateRange">
@@ -237,15 +237,16 @@
                         <el-input v-model="editActivityForm.detailAddress"></el-input>
                     </el-form-item>
                     <el-form-item label="活动工时" prop="workingHours"  style="width: 80%">
-                        <el-input v-model.number="editActivityForm.workingHours"></el-input>
+                        <el-input v-model.number="editActivityForm.workingHours" @keyup.native="number3"></el-input>
                     </el-form-item>
                     <el-form-item label="招募人数" prop="recruitNumber" style="width: 80%" >
-                        <el-input v-model.number="editActivityForm.recruitNumber"></el-input>
+                        <el-input v-model.number="editActivityForm.recruitNumber" @keyup.native="number4"></el-input>
                     </el-form-item>
                 
                     <el-form-item label="招募日期"  prop="recruitDateRange">
                         <el-date-picker
                             v-model="editActivityForm.recruitDateRange"
+                            
                             type="datetimerange"
                             range-separator="至"
                             start-placeholder="开始日期"
@@ -255,6 +256,7 @@
                     <el-form-item label="活动日期"  prop="activityDateRange" >
                         <el-date-picker
                             v-model="editActivityForm.activityDateRange"
+                            
                             type="datetimerange"
                             range-separator="至"
                             start-placeholder="开始日期"
@@ -358,10 +360,9 @@
             </el-dialog>
 
             <!-- 参加活动的志愿者评价信息弹出框 -->
-            <el-dialog title="志愿者评价信息" :visible.sync="volunteerEvaluateVisible" width="70%" >
+            <el-dialog title="评价信息" :visible.sync="volunteerEvaluateVisible" width="70%" >
                 <el-table
                 :data="volunteerEvaluateInfo"
-          
                 class="table"
                 header-cell-class-name="table-header"
                 >
@@ -386,6 +387,9 @@
                             </div>
                         </template>
                     </el-table-column>
+                    <el-table-column prop="workerEvaluate" label="我的评分" align="center"></el-table-column>
+                    <el-table-column prop="approvedResult" label="审核情况" align="center"  width="200"></el-table-column>
+                    
                 </el-table>
             </el-dialog>
         </el-container>
@@ -527,12 +531,12 @@ export default {
                     title: '    消息',
                     icon: 'iconfont icon-xiaoxi'
                 },
-                {
-                    // icon: 'el-icon-s-home',
-                    index: 'statistics',
-                    title: '    志愿统计',
-                    icon: 'iconfont icon-shezhi'
-                },
+                // {
+                //     // icon: 'el-icon-s-home',
+                //     index: 'statistics',
+                //     title: '    志愿统计',
+                //     icon: 'iconfont icon-shezhi'
+                // },
                 
             
             ],
@@ -595,6 +599,24 @@ export default {
             this.collapse = !this.collapse;
             global.collapse = !global.collapse;
         },
+        number1(){　　
+            
+            this.addActivityForm.workingHours = this.addActivityForm.workingHours.replace(/[^\d]/g,'');
+           
+    　　},
+        number2(){　　
+            this.addActivityForm.recruitNumber = this.addActivityForm.recruitNumber.replace(/[^\d]/g,'');
+            
+    　　},
+        number3(){　　
+            
+            this.editActivityForm.workingHours = this.editActivityForm.workingHours.replace(/[^\d]/g,'');
+    　　},
+        number4(){　　
+           
+            this.editActivityForm.recruitNumber = this.editActivityForm.recruitNumber.replace(/[^\d]/g,'');
+          
+    　　},
         
         handleInfo(id) {
             const { href } = this.$router.resolve({

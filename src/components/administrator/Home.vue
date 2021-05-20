@@ -70,7 +70,7 @@
                 <el-row :gutter="20" >
                     <el-col :span="20">
                         <el-card shadow="hover"  class="mgb20" style="height:600px;  background: #EAEDF1; text-align: center;" >
-                            <div id="chinaMapEchart" :style="{width: '100%', height: '580px',margin: auto}" ></div>
+                            <div id="chinaMapEchart" :style="{width: '100%', height: '580px',margin: auto,}" ></div>
                         </el-card>
                     </el-col>
                 </el-row>   
@@ -217,6 +217,11 @@ export default {
             },
                 
             chinaMap : {
+                title: {
+                    text: '全国志愿活动数量分布情况',
+                   
+                },
+            
                 tooltip: {
                         formatter:function(params,ticket, callback){
                             return params.seriesName+'<br />'+params.name+'：'+params.value
@@ -264,10 +269,10 @@ export default {
                         type: 'map',
                         geoIndex: 0,
                         data: [
-                                {name:"南海诸岛",value:3},
-                                {name: '北京', value: 3},
-                                {name: '天津', value: 300},
-                                {name: '上海', value: 3}
+                                // {name:"南海诸岛",value:3},
+                                // {name: '北京', value: 3},
+                                // {name: '天津', value: 300},
+                                // {name: '上海', value: 3}
                             ]
                     }
                 ],
@@ -367,6 +372,7 @@ export default {
             this.fiveYearNum.series[1].data =  res.data.fiveYearNumberVo.volunteerNums;
             this.sexRatio.series[0].data[0].value = res.data.sexRatio[0];
             this.sexRatio.series[0].data[1].value = res.data.sexRatio[1];
+            this.chinaMap.series[0].data = res.data.provinceActivityNum;
 
             let fiveYearNumEchart = this.$echarts.init(document.getElementById("fiveYearNumEchart"));
             let sexRatioEchart = this.$echarts.init(document.getElementById("sexRatioEchart"));

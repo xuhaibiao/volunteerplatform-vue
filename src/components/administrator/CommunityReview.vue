@@ -229,7 +229,6 @@ export default {
                 }else{
                     navigator.msSaveBlob(blob, fileName)
                 }
-
             }
         },
 

@@ -132,9 +132,9 @@ export default {
         return{
             user:{},
             screenForm: { 
-                province: '省', 
-                city: '市',
-                area: '区' ,
+                province: '', 
+                city: '',
+                area: '' ,
                 communityName:''
             
             },
@@ -186,12 +186,7 @@ export default {
                     title: '    消息',
                     icon: 'iconfont icon-xiaoxi'
                 },
-                {
-                    // icon: 'el-icon-s-home',
-                    index: 'setting',
-                    title: '    设置',
-                    icon: 'iconfont icon-shezhi'
-                }, 
+               
             
             ],
             tableData:[{ },
@@ -208,10 +203,10 @@ export default {
         this.collapse = global.collapse;
         this.user = JSON.parse(window.sessionStorage.getItem("user"));
         this.getCommunity();
-        this.screenForm.province="省";
-        this.screenForm.city="市";
-        this.screenForm.area="区";
-        this.screenForm.communityName = "";
+        // this.screenForm.province="省";
+        // this.screenForm.city="市";
+        // this.screenForm.area="区";
+        // this.screenForm.communityName = "";
         
     },
     methods:{
@@ -252,6 +247,9 @@ export default {
             
         },
         async handleSearch(){
+            if(this.screenForm.province == ''||this.screenForm.province == null) this.screenForm.province = "省";
+            if(this.screenForm.city == ''||this.screenForm.city == null) this.screenForm.city = "市";
+            if(this.screenForm.area == ''||this.screenForm.area == null) this.screenForm.area = "区";
             const {data:res} = await this.$http.get("volunteer/community/search",{  
                 params: {  
                     "province": this.screenForm.province,
