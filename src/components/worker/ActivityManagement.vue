@@ -725,6 +725,7 @@ export default {
                     if(this.editFile != null){
                         this.$refs.editUpload.submit();
                     }else{
+                    
                         console.log(this.editActivityForm.activityDateRange);
                         const {data :res} = await this.$http.post("worker/activity/editWithoutPic", this.editActivityForm);
                         if (res.code == 1 ) {
@@ -786,17 +787,22 @@ export default {
         },
         // 发布活动
         confirmAdd(formName){
+         
             this.$refs[formName].validate(async (valid) => {
             if (valid) {
+
                 if(this.addActivityForm.province =='省'||this.addActivityForm.province ==''
                 ||this.addActivityForm.city=='市'||this.addActivityForm.city==''
                 ||this.addActivityForm.area=='区'||this.addActivityForm.area==''){
                     this.$message.error("请填写完整省市区！");
                     return false;
+                }else if(this.addActivityForm.recruitDateRange[0]+"和"+this.addActivityForm.activityDateRange[0]){
+                    this.$message.error("招募开始时间必须在活动时间之前！");
+                    return false;
                 }else{
                     this.addActivityForm.workerId = this.user.id;
                     if(this.file == null){
-                        this.$message.error("请上传志愿照片！");
+                        this.$message.error("请上传志愿活动照片！");
                         return;
                     }else{
                         this.$refs.upload.submit();
