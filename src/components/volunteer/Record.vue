@@ -37,7 +37,7 @@
                 >
                 <el-table-column type="expand">
                     <template slot-scope="props">
-                        <el-form label-position="left" inline class="demo-table-expand" label-width="20%">
+                        <el-form label-position="left" inline class="demo-table-expand" label-width="40%">
                             <el-form-item label="记录编号：" >
                                 <span>{{ props.row.volunteerRecord.id }}</span>
                             </el-form-item>

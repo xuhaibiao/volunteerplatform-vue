@@ -254,6 +254,7 @@ export default {
                 var user = res.data;
                 this.form = user;
                 window.sessionStorage.setItem("user",JSON.stringify(user));
+                this.user = JSON.parse(window.sessionStorage.getItem("user"));
                 this.editVisible = false;
                 this.$message.success('更新成功！');
             }else if(res.code == 2){

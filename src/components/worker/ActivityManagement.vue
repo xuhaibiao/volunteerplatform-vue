@@ -138,10 +138,10 @@
             </el-dialog> -->
             
             <!-- 发布弹出框 -->
-            <el-dialog title="发布活动" :visible.sync="addVisible">
+            <el-dialog title="发布活动" :visible.sync="addVisible" width="60%">
                 <el-form ref="addActivityForm" :model="addActivityForm" :rules="addActivityRules" label-width="150px">
-                    <el-form-item label="活动名" prop="name" style="width: 60%">
-                        <el-input v-model="addActivityForm.name" type="integer"></el-input>
+                    <el-form-item label="活动名" prop="name" style="width: 80%">
+                        <el-input v-model="addActivityForm.name"></el-input>
                     </el-form-item>
                     <el-form-item label="活动省市区" prop="address">
                         <v-distpicker :province="addActivityForm.province" :city="addActivityForm.city" :area="addActivityForm.area" 
@@ -150,13 +150,13 @@
                                     @area="selectArea">
                         </v-distpicker>
                     </el-form-item>
-                    <el-form-item label="详细地址" prop="detailAddress"  style="width: 70%">
+                    <el-form-item label="详细地址" prop="detailAddress"  style="width: 80%">
                         <el-input v-model="addActivityForm.detailAddress"></el-input>
                     </el-form-item>
-                    <el-form-item label="活动工时" prop="workingHours"  style="width: 30%">
+                    <el-form-item label="活动工时" prop="workingHours"  style="width: 40%">
                         <el-input v-model.number="addActivityForm.workingHours" @keyup.native="number1"></el-input>
                     </el-form-item>
-                    <el-form-item label="招募人数" prop="recruitNumber"  style="width: 30%">
+                    <el-form-item label="招募人数" prop="recruitNumber"  style="width: 40%">
                         <el-input v-model.number="addActivityForm.recruitNumber" @keyup.native="number2"></el-input>
                     </el-form-item>
                 
@@ -221,7 +221,7 @@
             </el-dialog>
 
             <!-- 修改弹出框 -->
-            <el-dialog title="修改活动" :visible.sync="editVisible"  :show-close=false :close-on-click-modal='false'>
+            <el-dialog title="修改活动" :visible.sync="editVisible"  :show-close=false :close-on-click-modal='false' width="60%">
                 <el-form ref="editActivityForm" :model="editActivityForm" :rules="addActivityRules" label-width="150px">
                     <el-form-item label="活动名" prop="name" style="width: 80%">
                         <el-input v-model="editActivityForm.name" ></el-input>
@@ -236,10 +236,10 @@
                     <el-form-item label="详细地址" prop="detailAddress"  style="width: 80%">
                         <el-input v-model="editActivityForm.detailAddress"></el-input>
                     </el-form-item>
-                    <el-form-item label="活动工时" prop="workingHours"  style="width: 80%">
+                    <el-form-item label="活动工时" prop="workingHours"  style="width: 40%">
                         <el-input v-model.number="editActivityForm.workingHours" @keyup.native="number3"></el-input>
                     </el-form-item>
-                    <el-form-item label="招募人数" prop="recruitNumber" style="width: 80%" >
+                    <el-form-item label="招募人数" prop="recruitNumber" style="width: 40%" >
                         <el-input v-model.number="editActivityForm.recruitNumber" @keyup.native="number4"></el-input>
                     </el-form-item>
                 
@@ -311,7 +311,7 @@
 
 
             <!-- 审核报名弹出框 -->
-            <el-dialog title="报名情况" :visible.sync="reviewVisible" width="80%" >
+            <el-dialog title="报名情况" :visible.sync="reviewVisible" width="90%" >
                 <el-table
                 :data="reviewTableData"
                 border
