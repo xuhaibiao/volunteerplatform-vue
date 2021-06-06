@@ -240,6 +240,7 @@ export default {
                 }  
             });
             window.sessionStorage.setItem("user",JSON.stringify(res.data));
+            this.user = JSON.parse(window.sessionStorage.getItem("user"));
             this.form = res.data;
             
             
@@ -304,10 +305,11 @@ export default {
 .el-aside{
     background-color: #EBF1F6;
 }
+
 .el-main{
      /* background-image: url(./assets/img/main.png); */
-     background-color: #EBF1F6;
-
+    background-color: #EBF1F6;
+    overflow-y: hidden;
 }
 
 .form-box {

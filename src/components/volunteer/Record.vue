@@ -108,50 +108,6 @@
             
                
             </el-main>
-             <!-- 详情弹出框 -->
-            <!-- <el-dialog title="活动详情" :visible.sync="infoVisible">
-                <el-form ref="info" :model="info" label-width="100px">
-                    <el-form-item label="活动编号">
-                        <el-lebal v-model="info.activityResponse.activity.id">{{info.activityResponse.activity.id}}</el-lebal>
-                    </el-form-item>
-                    <el-form-item label="活动名">
-                        <el-lebal v-model="info.activityResponse.activity.name">{{info.activityResponse.activity.name}}</el-lebal>
-                    </el-form-item>
-                    <el-form-item label="活动地址" >
-                        <el-lebal v-model="info.activityResponse.activity.province">{{info.activityResponse.activity.province}}</el-lebal>
-                        &nbsp;
-                        <el-lebal v-model="info.activityResponse.activity.city">{{info.activityResponse.activity.city}}</el-lebal>
-                        &nbsp;
-                        <el-lebal v-model="info.activityResponse.activity.area">{{info.activityResponse.activity.area}}</el-lebal>
-                        &nbsp;
-                        <el-lebal v-model="info.activityResponse.activity.detailAddress">{{info.activityResponse.activity.detailAddress}}</el-lebal>
-                    </el-form-item>
-                    <el-form-item label="发起社区">
-                        <el-lebal v-model="info.activityResponse.communityName">{{info.activityResponse.communityName}}</el-lebal>
-                    </el-form-item>
-                    <el-form-item label="发起人">
-                        <el-lebal v-model="info.activityResponse.sponsor">{{info.activityResponse.sponsor}}</el-lebal>
-                    </el-form-item>
-                    <el-form-item label="工时/小时">
-                        <el-lebal v-model="info.activityResponse.activity.workingHours">{{info.activityResponse.activity.workingHours}}</el-lebal>
-                    </el-form-item>
-                    <el-form-item label="招募人数">
-                        <el-lebal v-model="info.activityResponse.activity.recruitNumber">{{info.activityResponse.activity.recruitNumber}}</el-lebal>
-                    </el-form-item>
-                    <el-form-item label="活动开始时间">
-                        <el-lebal v-model="info.activityResponse.activity.activityBeginTime">{{info.activityResponse.activity.activityBeginTime}}</el-lebal>
-                    </el-form-item>
-                     <el-form-item label="活动截止时间">
-                        <el-lebal v-model="info.activityResponse.activity.activityEndTime">{{info.activityResponse.activity.activityEndTime}}</el-lebal>
-                      </el-form-item>
-                    <el-form-item label="活动内容">
-                        <el-input v-model="info.activityResponse.activity.content" type="textarea" :disabled="true" :rows="5"></el-input>
-                    </el-form-item>
-                    
-                </el-form>
-            </el-dialog> -->
-
-
             <!-- 评价弹出框 -->
             <el-dialog title="评价" :visible.sync="evaluateVisible" :before-close="handleEvaluateClose" width="50%">
                 <el-form ref="evaluateRef" :model="evaluate" label-width="200px" :rules="evaluateRules">
@@ -394,16 +350,33 @@ export default {
                 this.evaluate.recordStatus = row.volunteerRecord.status;
                 this.evaluateVisible = true;
             }else{
-                this.cancelSignUpData.volunteerRecord = row.volunteerRecord;
-                this.cancelSignUpData.communityId = row.activityResponse.communityId;
-                this.cancelSignUpData.activityId = row.activityResponse.activity.id;
-                this.cancelSignUpData.activityName = row.activityResponse.activity.name;
-                const {data :res} = await this.$http.post("volunteer/record/cancelSignUp", this.cancelSignUpData);
-                if(res.code == 1){
-                    this.tableData[index].volunteerRecord.status = 1;
-                }
+                this.$confirm('取消报名后将无法再次报名该活动, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.confirmCancel(index,row);
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '异常'
+                    });          
+                });
+                
             }
             
+        },
+
+        async confirmCancel(index,row){
+            this.cancelSignUpData.volunteerRecord = row.volunteerRecord;
+            this.cancelSignUpData.communityId = row.activityResponse.communityId;
+            this.cancelSignUpData.activityId = row.activityResponse.activity.id;
+            this.cancelSignUpData.activityName = row.activityResponse.activity.name;
+            const {data :res} = await this.$http.post("volunteer/record/cancelSignUp", this.cancelSignUpData);
+            if(res.code == 1){
+                this.tableData[index].volunteerRecord.status = 1;
+                this.$message.success("取消报名成功！");
+            }
         },
         
         cancelEvaluate(){
@@ -487,9 +460,8 @@ export default {
     background-color: #EBF1F6;
 }
 .el-main{
-     /* background-image: url(./assets/img/main.png); */
-     background-color: #EBF1F6;
-
+    background-color: #EBF1F6;
+    // overflow-y: hidden;
 }
 
 </style>

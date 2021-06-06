@@ -270,9 +270,8 @@ export default {
     background-color: #EBF1F6;
 }
 .el-main{
-     /* background-image: url(./assets/img/main.png); */
-     background-color: #EBF1F6;
-
+    background-color: #EBF1F6;
+    overflow-y: hidden;
 }
 
 .form-box {

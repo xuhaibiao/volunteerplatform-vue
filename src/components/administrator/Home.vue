@@ -446,8 +446,7 @@ export default {
 }
 .el-main{
      /* background-image: url(./assets/img/main.png); */
-     background-color: #EBF1F6;
-
+    background-color: #EBF1F6;
 }
 
 .handle-input {

@@ -712,16 +712,11 @@ export default {
                 if(this.editActivityForm.province=='省'||this.editActivityForm.city=='市'||this.editActivityForm.area=='区'){
                     this.$message.error("请填写完整省市区！");
                     return false;
+                }else if(this.editActivityForm.recruitDateRange[0]>=this.editActivityForm.activityDateRange[0]){
+                    this.$message.error("招募开始时间必须在活动时间之前！");
+                    return false;
                 }else{
-                    
                     this.editActivityForm.workerId = this.user.id;
-                    // this.editActivityForm.recruitBeginTime = this.editActivityForm.recruitDateRange[0];
-                    // this.editActivityForm.recruitEndTime = this.editActivityForm.recruitDateRange[1];
-                    // this.editActivityForm.activityBeginTime = this.editActivityForm.activityDateRange[0];
-                    // this.editActivityForm.activityEndTime = this.editActivityForm.activityDateRange[1];
-                    // console.log(this.editActivityForm.activityEndTime);
-                    // alert("edit");
-                
                     if(this.editFile != null){
                         this.$refs.editUpload.submit();
                     }else{
@@ -737,16 +732,7 @@ export default {
                             this.$message.error(res.msg);
                         }
                     }
-                    
-                    
-                    // const {data :res} = await this.$http.put("worker/activity/edit", this.editActivityForm);
-                    // if (res.code == 1 ) {
-                    //     this.editVisible = false;
-                    //     this.$message.success("修改成功！");
-                    //     this.reload();
-                    // }else{
-                    //     this.$message.error("修改失败！！！");
-                    // }
+                 
                 }
             } else {
                 return false;
@@ -757,20 +743,6 @@ export default {
         },
         cancelEdit(){
             this.editVisible = false;
-            // this.editActivityForm.name = '';
-            // this.editActivityForm.recruitRange = "全国";
-            // this.editActivityForm.province = '';
-            // this.editActivityForm.city = '';
-            // this.editActivityForm.area = '';
-            // this.editActivityForm.detailAddress = '';
-            // this.editActivityForm.workingHours = '';
-            // this.editActivityForm.recruitNumber = '';
-            // this.editActivityForm.recruitDateRange[0] = '';
-            // this.editActivityForm.recruitDateRange[1] = '';
-            // this.editActivityForm.activityDateRange[0] = '';
-            // this.editActivityForm.activityDateRange[1] = '';
-            // this.editActivityForm.content = '';
-            // this.editActivityForm.id = '';
             
         },
         handleAdd(){
@@ -796,7 +768,7 @@ export default {
                 ||this.addActivityForm.area=='区'||this.addActivityForm.area==''){
                     this.$message.error("请填写完整省市区！");
                     return false;
-                }else if(this.addActivityForm.recruitDateRange[0]+"和"+this.addActivityForm.activityDateRange[0]){
+                }else if(this.addActivityForm.recruitDateRange[0]>=this.addActivityForm.activityDateRange[0]){
                     this.$message.error("招募开始时间必须在活动时间之前！");
                     return false;
                 }else{
@@ -977,9 +949,8 @@ export default {
     background-color: #EBF1F6;
 }
 .el-main{
-     /* background-image: url(./assets/img/main.png); */
-     background-color: #EBF1F6;
-
+    background-color: #EBF1F6;
+    // overflow-y: hidden;
 }
 
 .handle-input {

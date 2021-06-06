@@ -127,7 +127,7 @@
 
              <!-- 原因弹出框 -->
             <el-dialog title="原因" :visible.sync="reasonVisible" width="40%" :show-close=false :close-on-click-modal='false'>
-                <el-form ref="changeStatusForm" :model="changeStatusForm" :rules="changeStatusRules" label-width="110px">
+                <el-form ref="changeStatusFormRef" :model="changeStatusForm" :rules="changeStatusRules" label-width="110px">
                     <el-form-item label="活动编号" prop="activity.id" style="width: 60%">
                         <el-label v-model="changeStatusForm.activity.id">{{changeStatusForm.activity.id}}</el-label>
                     </el-form-item>
@@ -138,7 +138,7 @@
                         <el-input type="textarea" rows="5" v-model="changeStatusForm.reason"></el-input>
                     </el-form-item>
                     <el-form-item >
-                        <el-button type="primary" @click="confirmChange('changeStatusForm')">确 定</el-button>
+                        <el-button type="primary" @click="confirmChange()">确 定</el-button>
                         <el-button @click="cancelChange">取 消</el-button>
                     </el-form-item>
                 </el-form>
@@ -289,6 +289,7 @@ export default {
         
       
         handleBanStatus(index, row){
+            this.changeStatusForm.reason = '';
             if(row.hasDeleted == 1){
                 this.changeStatusForm.activity = row;
                 this.changeStatusForm.index = index;
@@ -309,10 +310,10 @@ export default {
             }
          },
 
-        async confirmChange(changeStatusForm){
-            this.$refs[changeStatusForm].validate(async (valid) => {
+        confirmChange(){
+            this.$refs['changeStatusFormRef'].validate(async (valid) => {
             if (valid) {
-                const {data:res} = await this.$http.post("administrator/activityAuthority/changeBanStatus", changeStatusForm);
+                const {data:res} = await this.$http.post("administrator/activityAuthority/changeBanStatus", this.changeStatusForm);
                 if(res.code == 2){
                     this.$message.success("改变封禁状态失败！");
                 }
@@ -322,11 +323,6 @@ export default {
             }
             });
 
-
-
-            
-            
-
         },
 
         cancelChange(){
@@ -335,8 +331,6 @@ export default {
             this.tableData[idx].activity.hasDeleted = this.tableData[idx].activity.hasDeleted ^ 1;
             this.reasonVisible = false;
         },
-        
-
         
 
         // 初始页currentPage、初始每页数据数pagesize和数据data
@@ -380,9 +374,8 @@ export default {
     background-color: #EBF1F6;
 }
 .el-main{
-     /* background-image: url(./assets/img/main.png); */
-     background-color: #EBF1F6;
-
+    background-color: #EBF1F6;
+    // overflow-y: hidden;
 }
 
 .handle-input {
