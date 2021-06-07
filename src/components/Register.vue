@@ -24,7 +24,7 @@
                 <el-row>
                     <el-col :span="12">
                         <el-form-item prop="password">
-                            <el-input v-model="registerForm.password" type="password" style="margin-left:30px"  placeholder="请输入密码">
+                            <el-input v-model="registerForm.password" type="password" style="margin-left:30px"  placeholder="请输入6~8位密码">
                                 <el-button slot="prepend" icon="iconfont icon-mima"></el-button>
                             </el-input>
                         </el-form-item>
@@ -204,7 +204,7 @@ export default {
                     
                 ],
                 password: [
-                    { required: true, message: "请输入密码", trigger: "blur" },
+                    { required: true, message: "请输入6~8位密码", trigger: "blur" },
                     { min: 6, max: 8, message: "密码为 6~8 位", trigger: "blur" }
                 ],
                 idCard: [
